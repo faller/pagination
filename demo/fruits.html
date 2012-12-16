@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8"/>
+		<title>pagination</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="../css/pagination.css" type="text/css"/>
+        <style type="text/css">
+            #page  { margin: 50px; }
+            .fruit { height: 20px; padding: 20px; border-bottom: 1px solid #CCC; border-left: 5px solid white; }
+            .fruit.pointed  { border-left-color: #CCC; }
+            .fruit.selected { background: #F5F5F5; }
+        </style>
+        <script src="../dependence/underscore.js"></script>
+		<script src="../dependence/jquery-1.8.3.js"></script>
+        <script src="../dependence/jquery.mousewheel-2.0.0.js"></script>
+        <script src="../dependence/jquery.drags-0.3.js"></script>
+        <script src="../js/slider.js"></script>
+        <script src="../js/jumper.js"></script>
+        <script src="../js/screen.js"></script>
+        <script src="../js/pagination.js"></script>
+        <script src="mocker.js"></script>
+        <script type="text/template" id="sayHelloTemplate">
+            <div class="fruit">
+                <span>hello, {{= type }}, with id {{= id }}</span>
+            </div>
+        </script>
+        <script type="text/javascript">
+            _.templateSettings = {
+                interpolate : /\{\{=(.+?)\}\}/g
+            };
+
+            var onDataCallback = function( data ) {
+                var template = _.template( $( '#sayHelloTemplate' ).html(), data );
+                return $(template);
+            };
+
+            var dataSource = mock({
+                amount: 100,
+                idAttribute: 'id',
+                timeAttribute: 'time',
+                randomAttributes: [{
+                    key: 'type',
+                    values: [ 'apple', 'banana', 'orange', 'grapes' ]
+                }],
+                rate: 1000
+            });
+
+            $( document ).ready( function() {
+                $( '#page' ).pagination({
+                    dataSource: dataSource,            // can be a function or url
+                    onData: onDataCallback,            // a callback return dom element
+                    params: {
+                        query: 'type gte a, type lte z, time gt 0',
+                        sort: 'type asc, time desc'
+                    },
+                    pageSize: 6,
+                    buffered: true,
+                    mode: 'slider'
+                });
+            });
+        </script>
+	</head>
+	<body>
+		<div id="page"></div>
+	</body>
+</html>
+

@@ -1,0 +1,80 @@
+.pagination,
+.pagination .screen                  { position: relative; }
+.pagination .screen .page            { display: none; }
+.pagination .screen .page.current    { display: block; }
+.pagination .screen .overlay         { display: none; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 1; }
+.pagination .screen .overlay.loading { display: block; background: transparent url('img/loading.gif') no-repeat center center; }
+.pagination .screen .overlay.error   { display: block; background: transparent url('img/error.gif')   no-repeat center center; }
+.pagination .screen .overlay.empty   { display: block; background: transparent url('img/empty.gif')   no-repeat center center; }
+.pagination .screen .page .item         { }   /* on your own */
+.pagination .screen .page .item.seleted { }   /* on your own */
+.pagination .screen .page .item.pointed { }   /* on your own */
+
+.pagination .slider          { position: absolute; width: 23px; height: 100%; top: 0px;  right: -15px; }
+.pagination .slider .range   { position: absolute; width: 7px;  bottom: 23px; top: 23px; left: 8px; cursor: pointer; }
+.pagination .slider .current { position: absolute; width: 100%; height: 100%; top: 0px;  left: 0px; cursor: move; display: none; }
+.pagination .slider .bg      { position: relative; width: 100%; height: 100%; }
+.pagination .slider .head    { position: absolute; width: 100%; height: 23px; left: 0px; top: -23px; }
+.pagination .slider .tail    { position: absolute; width: 100%; height: 23px; left: 0px; bottom: -23px; }
+.pagination .slider .head    { border-radius: 4px 4px 0px 0px; -webkit-border-radius: 4px 4px 0px 0px; background: inherit; }
+.pagination .slider .tail    { border-radius: 0px 0px 4px 4px; -webkit-border-radius: 0px 0px 4px 4px; background: inherit; }
+
+.pagination:hover .slider .current     { background-color: #CCC; }
+.pagination .slider:hover .current,
+.pagination .slider .dragging .current { background-color: #808080; }
+.pagination .slider:hover .bg,
+.pagination .slider .dragging .bg      { background-color: #EEE; }
+
+.pagination .slider .current .tip           { display: none; position: absolute; right: 15px; height: 20px; border-radius: 8px 8px 8px 8px; -webkit-border-radius: 8px 8px 8px 8px; min-width: 30px; }
+.pagination .slider .current .tip           { background-color: #EEE; color: #808080; text-align: center; font-size: 12px; font-family: arial,sans-serif; text-shadow: 1px 1px 1px white; line-height: 1.7; }
+.pagination .slider .current .head .tip     { top: -10px; }
+.pagination .slider .current .tail .tip     { top: 11px; }
+.pagination .slider .dragging .current .tip { display: block; }
+
+.pagination .jumper                 { position: absolute; width: 100%; height: 40px; bottom: -60px; left: 0px; padding-top: 20px; }
+.pagination .jumper .text           { color: #555; font-family: Arial,sans-serif; font-size: 16px; text-align: center; padding: 6px 16px; }
+.pagination .jumper button          { float: right; cursor: pointer; background: #E6E6E6; border: 1px solid lightGrey; border-radius: 4px 4px 4px 4px; -webkit-border-radius: 4px 4px 4px 4px; margin-top: -1px; }
+.pagination .jumper button:hover    { background: #f9f9f9; }
+.pagination .jumper .tip            { float: left; }
+.pagination .jumper .current        { float: right; }
+.pagination .jumper .current .read  { cursor: pointer; font-weight: bold; padding: 0px 4px;}
+.pagination .jumper .current .write { display: none; width: 25px; height: 17px; padding: 0px; }
+
+
+/* ie sucks begin */
+.pagination                       { _zoom: 1;}
+.pagination .screen               { *width: 100%; }
+.pagination .slider               { *height: expression( this.parentNode.offsetHeight ); }
+.pagination .slider .range        { *height: expression( this.parentNode.offsetHeight - 46 ); }
+.pagination .slider .current .tip { _padding: 0px 10px; }
+
+.pagination.ie6-hover .slider .current .head,
+.pagination.ie6-hover .slider .current .tail,
+.pagination.ie6-hover .slider .current,
+.pagination:hover .slider .current .head,
+.pagination:hover .slider .current .tail,
+.pagination:hover .slider .current { background-color: #CCC; }
+
+.pagination .slider.ie6-hover .current .head,
+.pagination .slider.ie6-hover .current .tail,
+.pagination .slider.ie6-hover .current,
+.pagination .slider:hover .current .head,
+.pagination .slider:hover .current .tail,
+.pagination .slider:hover .current,
+.pagination .slider .dragging .current .head,
+.pagination .slider .dragging .current .tail,
+.pagination .slider .dragging .current { background-color: #808080; }
+
+.pagination .slider.ie6-hover .bg .head,
+.pagination .slider.ie6-hover .bg .tail,
+.pagination .slider.ie6-hover .bg,
+.pagination .slider:hover .bg .head,
+.pagination .slider:hover .bg .tail,
+.pagination .slider:hover .bg,
+.pagination .slider .dragging .bg .head,
+.pagination .slider .dragging .bg .tail,
+.pagination .slider .dragging .bg { background-color: #EEE; }
+
+/* ie sucks end */
+
+
