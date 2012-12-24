@@ -41,7 +41,7 @@
 
 
 /* ie sucks begin */
-.pagination                       { _zoom: 1;}
+.pagination                       { _zoom: 1; }
 .pagination .screen               { *width: 100%; }
 .pagination .slider               { *height: expression( this.parentNode.offsetHeight ); }
 .pagination .slider .range        { *height: expression( this.parentNode.offsetHeight - 46 ); }

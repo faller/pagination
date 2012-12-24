@@ -108,16 +108,16 @@
         $current.drags({
             axis: 'y',
             during: ( function() {
-                var internal = _.throttle( function( scale ){
+                var internal = _.throttle( function( $data, scale ){
                     var start= Math.min( Math.round( scale.y * $data.total ), $data.total - $data.limit );
                     // change tip
-                    _tip.call( that, start );
-                    that.data( NAMESPACE ).start = start;
+                    _tip.call( this, start );
+                    $data.start = start;
                     // event bubbling
-                    that.trigger( 'change:start', start );
+                    this.trigger( 'change:start', start );
                 }, EVENT_RATE );
                 return function( scale ) {
-                    internal( scale );
+                    internal.call( that, $data, scale );
                 };
             })()
         });

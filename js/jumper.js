@@ -5,14 +5,15 @@
 (function ( factory ) {
     if ( typeof define === 'function' && define.amd ) {
         // AMD. Register as an anonymous module.
-        define( [ 'jquery' ], factory );
+        define( [ 'jquery', 'underscore' ], factory );
     } else {
         // Browser globals
-        factory( jQuery );
+        factory( jQuery, _ );
     }
-})( function( $ ) {
+})( function( $, _ ) {
 
-    var NAMESPACE  = 'pJumper';
+    var NAMESPACE     = 'pJumper',
+        DEBOUNCE_RATE = 500;         // prevent frequently input
 
     var _template = [
         '<span class="tip text">',
@@ -80,7 +81,6 @@
             $data = that.data( NAMESPACE ),
             $prev = that.find( '.prev' ),
             $next = that.find( '.next' ),
-            $tip = that.find( '.tip' ),
             $current = that.find( '.current' ),
             $currentRead = $current.find( '.read'),
             $currentWrite = $current.find( '.write' );
@@ -94,20 +94,25 @@
             $currentRead.css( 'display', 'none' );
             $currentWrite.css( 'display', 'inline').focus();
         });
+        var _debounceAttr = _.debounce( _attr, DEBOUNCE_RATE );
         $currentWrite.on( 'blur', function( event ) {
             $currentRead.css( 'display', 'inline' );
             $currentWrite.css( 'display', 'none' );
-            _attr.call( that, 'current', ( $currentWrite.val() - 1 ) * $data.pageSize );
-        });
-        $currentWrite.on( 'keyup', function( event ) {
-            if ( event.keyCode === 13 ) {
-                _attr.call( that, 'current', ( $currentWrite.val() - 1 ) * $data.pageSize );
+        }).on( 'keyup', function( event ) {
+            var inputVal = $currentWrite.val();
+            if ( ! /^\d+$/.test( inputVal ) ) {
+                $currentWrite.val( /^\d+/.exec( inputVal ) );
+                return false;
+            } else {
+                _debounceAttr.call( that, 'current', ( inputVal - 1 ) * $data.pageSize );
             }
-            if ( ! /^\d+$/.test( $currentWrite.val() ) ) {
-                $currentWrite.val( /^\d+/.exec( $currentWrite.val() ) );
-            }
-            return false;
         });
+        if ( $.browser.msie && ( parseInt( $.browser.version, 10 ) === 8 ) ) {
+            // ie8 hacks. preventing $next button trigger in ie8
+            $currentWrite.on( 'keypress', function( event ) {
+                if ( event.keyCode === 13 ) return false;
+            });
+        }
     };
 
     var _attr = function( key, value ) {
