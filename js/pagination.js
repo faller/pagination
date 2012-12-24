@@ -80,7 +80,7 @@
         // screen will reload after changing dataSource
         // dataSource should handle ajax params like this:
         //    params: {
-        //        query: 'type gte a, type lte z, time gt 0',
+        //        query: 'type gte {a}, type lte {z}, time gt {0}',
         //        sort: 'type asc, time desc',
         //        skip: 0,
         //        limit: 100,
