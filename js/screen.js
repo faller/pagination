@@ -1,8 +1,16 @@
-//    pagination screen v0.3
+//    pagination screen v0.4
 //    (c) 2012-2013 caicanliang, faller@faller.cn
 //    freely distributed under the MIT license.
 
-(function( win, doc, $, undefined ) {
+(function ( factory ) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define( [ 'jquery', 'underscore' ], factory );
+    } else {
+        // Browser globals
+        factory( jQuery, _ );
+    }
+})( function( $, _ ) {
 
     var NAME_SPACE         = 'pScreen',
         PAGE_ID_PREFIX     = 'page-',
@@ -28,6 +36,7 @@
                 $.extend( $data, {
                     buffered: options.buffered,
                     pageSize: options.pageSize,
+                    limit: options.limit,
                     onData: options.onData,
                     dataSource: _dataSourceTransformer( options.dataSource ),
                     params: options.params
@@ -98,12 +107,7 @@
                     $this.find( selector ).addClass( 'selected' );
                 });
             } else {
-                var list = [];
-                var $doms = this.find( '.selected' );
-                $doms.each( function() {
-                    list.push( $( this ).data( 'data' ) );
-                });
-                return list;
+                return this.find( '.selected' );
             }
         },
 
@@ -117,7 +121,7 @@
                     _locate.call( $this, location );
                 });
             } else {
-                return this.find( '.pointed' ).data( 'data' );
+                return this.find( '.pointed' );
             }
         },
 
@@ -181,7 +185,6 @@
         $data.count = null;
         $data.buffer = {};
         var $page = _createPage.call( that, 0 );
-        $page.addClass( 'current' );
         pageMapping.currentPage = $page;
         _completePage.call( that, $page, function() {
             _locate.call( that, 0 );
@@ -210,11 +213,11 @@
         }, DEBOUNCE_RATE );
 
         var _fixCurrentPage = function( context ) {
-            context.buffered ? context.pageMapping.currentPage.removeClass( 'current' ) : (
+            context.buffered ? context.pageMapping.currentPage.addClass( 'hidden' ) : (
                 delete context.pageMapping[ context.currentPageNumber ],
                 context.pageMapping.currentPage.remove()
             );
-            context.pageMapping.currentPage = context.pageMapping[ context.targetPageNumber ].addClass( 'current' );
+            context.pageMapping.currentPage = context.pageMapping[ context.targetPageNumber ].removeClass( 'hidden' );
         };
 
         var _pointItem = function( context ) {
@@ -250,7 +253,8 @@
     })();
 
     var _createPage = function( pageNumber ) {
-        var $page = $('<div class="page"></div>');
+        var tagName = this.find( '.overlay' ).prop( 'tagName' ).toLowerCase();    // use overlay's tagName for custom dom structure
+        var $page = $( '<' + tagName + ' class="page"></' + tagName + '>' );
         $page.attr( 'id', PAGE_ID_PREFIX + pageNumber );
         this.append( $page );
         this.data( NAME_SPACE ).pageMapping[ pageNumber ] = $page;
@@ -263,7 +267,7 @@
 
         var params = _.extend({
             skip: _pageNumber( $page ) * $data.pageSize,
-            limit: $data.pageSize,
+            limit: $data.limit ? $data.limit : $data.pageSize,
             count: ( $data.count == null )
         }, $data.params );
 
@@ -271,7 +275,6 @@
             var $doms = _.map( data.list, function( item ) {
                 var $dom = $( $data.onData( item ) );
                 $dom.addClass( 'item' );
-                $dom.data( 'data', item );
                 return $dom;
             });
             _setOverlay.call( that, 'empty', _.isEmpty( $doms ) ? 'add' : 'remove' );
@@ -394,4 +397,4 @@
         return parseInt( $page.attr( 'id' ).substring( PAGE_ID_PREFIX.length ) );
     };
 
-} )( window, document, jQuery );
+});

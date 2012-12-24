@@ -1,8 +1,16 @@
-//    pagination jumper v0.3
+//    pagination jumper v0.4
 //    (c) 2012-2013 caicanliang, faller@faller.cn
 //    freely distributed under the MIT license.
 
-(function( win, doc, $, undefined ) {
+(function ( factory ) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define( [ 'jquery' ], factory );
+    } else {
+        // Browser globals
+        factory( jQuery );
+    }
+})( function( $ ) {
 
     var NAMESPACE  = 'pJumper';
 
@@ -143,4 +151,4 @@
         }
     };
 
-})( window, document, jQuery );
+});

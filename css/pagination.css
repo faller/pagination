@@ -1,7 +1,6 @@
 .pagination,
 .pagination .screen                  { position: relative; }
-.pagination .screen .page            { display: none; }
-.pagination .screen .page.current    { display: block; }
+.pagination .screen .page.hidden     { display: none; }
 .pagination .screen .overlay         { display: none; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 1; }
 .pagination .screen .overlay.loading { display: block; background: transparent url('img/loading.gif') no-repeat center center; }
 .pagination .screen .overlay.error   { display: block; background: transparent url('img/error.gif')   no-repeat center center; }
@@ -10,9 +9,9 @@
 .pagination .screen .page .item.seleted { }   /* on your own */
 .pagination .screen .page .item.pointed { }   /* on your own */
 
-.pagination .slider          { position: absolute; width: 23px; height: 100%; top: 0px;  right: -15px; }
+.pagination .slider          { position: absolute; width: 23px; height: 100%; top: 0px;  right: -15px; display: none; }
 .pagination .slider .range   { position: absolute; width: 7px;  bottom: 23px; top: 23px; left: 8px; cursor: pointer; }
-.pagination .slider .current { position: absolute; width: 100%; height: 100%; top: 0px;  left: 0px; cursor: move; display: none; }
+.pagination .slider .current { position: absolute; width: 100%; height: 100%; top: 0px;  left: 0px; cursor: move; }
 .pagination .slider .bg      { position: relative; width: 100%; height: 100%; }
 .pagination .slider .head    { position: absolute; width: 100%; height: 23px; left: 0px; top: -23px; }
 .pagination .slider .tail    { position: absolute; width: 100%; height: 23px; left: 0px; bottom: -23px; }
@@ -31,7 +30,7 @@
 .pagination .slider .current .tail .tip     { top: 11px; }
 .pagination .slider .dragging .current .tip { display: block; }
 
-.pagination .jumper                 { position: absolute; width: 100%; height: 40px; bottom: -60px; left: 0px; padding-top: 20px; }
+.pagination .jumper                 { position: absolute; width: 100%; height: 40px; bottom: -60px; left: 0px; padding-top: 20px; display: none; }
 .pagination .jumper .text           { color: #555; font-family: Arial,sans-serif; font-size: 16px; text-align: center; padding: 6px 16px; }
 .pagination .jumper button          { float: right; cursor: pointer; background: #E6E6E6; border: 1px solid lightGrey; border-radius: 4px 4px 4px 4px; -webkit-border-radius: 4px 4px 4px 4px; margin-top: -1px; }
 .pagination .jumper button:hover    { background: #f9f9f9; }

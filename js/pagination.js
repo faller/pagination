@@ -1,4 +1,4 @@
-//    pagination v0.3, require screen.js & ( slider.js or jumper.js )
+//    pagination v0.4, require screen.js & ( slider.js or jumper.js )
 //    (c) 2012-2013 caicanliang, faller@faller.cn
 //    freely distributed under the MIT license.
 //
@@ -7,7 +7,7 @@
 //          dataSource: 'xxxx.action',         // can be a function or url
 //          onData: onDataCallback,            // a callback return dom element
 //          params: {
-//              query: 'type gte a, type lte z, time gt 0',
+//              query: 'type gte {a}, type lte {z}, time gt {0}',
 //              sort: 'type asc, time desc'
 //          },
 //          pageSize: 10,
@@ -15,7 +15,21 @@
 //          mode: 'slider'                     // try 'slider' in narrow space and 'jumper' in waterfall page
 //    }
 
-(function( win, doc, $, undefined ) {
+(function ( factory ) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define( [ 'jquery', 'underscore', './screen', './slider', './jumper' ], factory );
+    } else {
+        // Browser globals
+        factory( jQuery, _ );
+    }
+})( function( $, _ ) {
+
+    var _template = [
+        '<div class="screen"></div>',
+        '<div class="slider"></div>',
+        '<div class="jumper"></div>'
+    ].join( '' );
 
     var methods = {
         init: function( opts ) {
@@ -27,14 +41,9 @@
                     // add namespace
                     $this.addClass( 'pagination' ) ;
                     // add doms if not exist
-                    if ( !$this.children().length ) {
-                        var template = '<div class="screen"></div>';
-                        ( options.mode === 'slider' ) && ( template += '<div class="slider"></div>' );
-                        ( options.mode === 'jumper' ) && ( template += '<div class="jumper"></div>' );
-                        $this.html( template );
-                    }
+                    $this.children().length || $this.html( _template );
                     // bind events
-                    _bindEvents.call( $this );
+                    _bindEvents.call( $this, options.mode );
                 }
                 ( options.mode === 'slider' ) && $this.find( '.slider' ).pSlider( options );
                 ( options.mode === 'jumper' ) && $this.find( '.jumper' ).pJumper( options );
@@ -137,20 +146,20 @@
         }
     };
 
-    var _bindEvents = function() {
+    var _bindEvents = function( mode ) {
         var that = this,
             $screen = that.find( '.screen'),
             $slider = that.find( '.slider' ),
             $jumper = that.find( '.jumper' );
         $screen.on( 'reload', function( event, args ) {
             // reset slider
-            $slider.length && $slider.pSlider( 'attr', {
+            ( mode === 'slider' ) && $slider.pSlider( 'attr', {
                 start: 0,
                 limit: args.pageSize,
                 total: args.count,
                 silent: true
             });
-            $jumper.length && $jumper.pJumper( 'attr', {
+            ( mode === 'jumper' ) && $jumper.pJumper( 'attr', {
                 current: 0,
                 pageSize: args.pageSize,
                 count: args.count,
@@ -158,12 +167,12 @@
             });
             event.stopPropagation();
         });
-        $slider.length && $slider.on( 'change:start', function( event, start ) {
+        ( mode === 'slider' ) && $slider.on( 'change:start', function( event, start ) {
             // point at the given location
             $screen.pScreen( 'locate', start );
             event.stopPropagation();
         });
-        $jumper.length && $jumper.on( 'change:current', function( event, current ) {
+        ( mode === 'jumper' ) && $jumper.on( 'change:current', function( event, current ) {
             // point at the given location
             $screen.pScreen( 'locate', current );
             event.stopPropagation();
@@ -179,13 +188,14 @@
             });
         }
         if ( _.isString( sort ) ) {
-            return _.map( sort.split( ',' ), function( current ) {
-                current = $.trim( current ).split( ' ' );
-                return {
-                    key: $.trim( current[ 0 ] ),
-                    order: $.trim( current[ 1 ] )
-                };
-            });
+            return ( sort = sort.replace( /^\s+|\s+$/g, '' ), sort === '' ) ? [] :
+                _.map( sort.split( /\s*,\s*/ ), function( current ) {
+                    current = current.split( /\s+/ );
+                    return {
+                        key: current[ 0 ],
+                        order: current[ 1 ]
+                    };
+                });
         }
         return [];
     };
@@ -199,16 +209,19 @@
             });
         }
         if ( _.isString( query ) ) {
-            return _.map( query.split( ',' ), function( current ) {
-                current = $.trim( current ).split( ' ' );
-                return {
-                    key: $.trim( current[ 0 ] ),
-                    operator: $.trim( current[ 1 ] ),
-                    value: $.trim( current[ 2 ] )
-                };
-            });
+            return ( query = query.replace( /^\s+|\s+$/g, '' ), query === '' ) ? [] :
+                _.map( query.replace( /\s*\}$/g, '' ).split( /\s*\}\s*\,\s*/ ), function( current ) {
+                    var divide = current.lastIndexOf('{');
+                    var front = current.substring( 0, divide ).replace( /\s+$/, '' ).split( /\s+/ );
+                    var behind = current.substring( divide + 1 ).replace( /^\s+/, '' );
+                    return {
+                        key: front[ 0 ],
+                        operator: front[ 1 ],
+                        value: behind
+                    };
+                });
         }
         return [];
     };
 
-})( window, document, jQuery );
+});

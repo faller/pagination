@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8"/>
+        <title>pagination</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css" type="text/css"/>
+        <script data-main="main" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js"></script>
+        <script type="text/template" id="projectTemplate">
+            <tr class="project">
+                <td>{{= id }}</td>
+                <td>{{= name }}</td>
+                <td>{{= voltage }}</td>
+                <td>{{= company }}</td>
+                <td>{{= type }}</td>
+                <td>{{= money }}</td>
+                <td>{{= reason }}</td>
+                <td>{{= month }}</td>
+            </tr>
+        </script>
+    </head>
+    <body>
+        <div id="projects">
+            <table class="table screen">
+                <thead>
+                    <tr>
+                        <th>变更单号</th>
+                        <th>项目名称</th>
+                        <th>电压等级(kV)</th>
+                        <th>分子公司</th>
+                        <th>变更类型</th>
+                        <th>变更金额(元)</th>
+                        <th>变更原因</th>
+                        <th>变更时间(月)</th>
+                    </tr>
+                </thead>
+                <tbody class="overlay"></tbody>
+            </table>
+            <div class="slider"></div>
+            <div class="jumper"></div>
+        </div>
+    </body>
+</html>

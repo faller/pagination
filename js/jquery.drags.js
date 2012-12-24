@@ -1,8 +1,16 @@
-//     simple drags within parent v0.3
+//     simple drags within parent v0.4
 //    (c) 2012-2013 caicanliang, faller@faller.cn
 //    freely distributed under the MIT license.
 
-(function( win, doc, $, undefined ) {
+(function ( factory ) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define( [ 'jquery' ], factory );
+    } else {
+        // Browser globals
+        factory( jQuery );
+    }
+})( function( $ ) {
     $.fn.drags = function( opts ) {
         var options = $.extend( {}, opts );
         return this.each( function() {
@@ -18,14 +26,14 @@
                 // prevent text selection (except IE)
                 event.preventDefault();
                 // prevent text selection in IE
-                doc.onselectstart = function () { return false; };
+                document.onselectstart = function () { return false; };
             });
-            $( doc ).on( "mouseup", function() {
+            $( document ).on( "mouseup", function() {
                 if ( !isDragging ) return;
                 isDragging = false;
                 $this.parent().removeClass( 'dragging' );
                 // enable IE text selection
-                doc.onselectstart = null;
+                document.onselectstart = null;
             }).on( "mousemove", function( event ) {
                 if ( !isDragging ) return;
                 var scale = {}, bubbleScale = {};
@@ -53,4 +61,5 @@
             });
         });
     };
-})( window, document, jQuery );
+
+});

@@ -1,8 +1,16 @@
-//    pagination slider v0.3
+//    pagination slider v0.4
 //    (c) 2012-2013 caicanliang, faller@faller.cn
 //    freely distributed under the MIT license.
 
-(function( win, doc, $, undefined ) {
+(function ( factory ) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define( [ 'jquery', 'underscore', 'jquery.mousewheel', './jquery.drags' ], factory );
+    } else {
+        // Browser globals
+        factory( jQuery, _ );
+    }
+})( function( $, _ ) {
 
     var NAMESPACE  = 'pSlider',
         EVENT_RATE = 200;
@@ -153,7 +161,7 @@
 
         if ( attrs.total != null ) {
             $data.total = Math.max( attrs.total, 0.0000001 );     // avoid NaN
-            $current.css( 'display', ( $data.total < 1 ) ? 'none' : 'block' );
+            this.css( 'display', ( $data.total < 1 ) ? 'none' : 'block' );
             if ( attrs.limit == null ) {
                 attrs.limit = $data.limit;     // to trigger next if
             }
@@ -192,4 +200,4 @@
         $tail.html( Math.min( count + $data.limit, Math.round( $data.total ) ) );
     };
 
-})( window, document, jQuery );
+});
