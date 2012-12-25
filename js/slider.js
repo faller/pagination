@@ -5,7 +5,7 @@
 (function ( factory ) {
     if ( typeof define === 'function' && define.amd ) {
         // AMD. Register as an anonymous module.
-        define( [ 'jquery', 'underscore', 'jquery.mousewheel', './jquery.drags' ], factory );
+        define( [ 'jquery', 'underscore', 'jquery-mousewheel', './jquery-drags' ], factory );
     } else {
         // Browser globals
         factory( jQuery, _ );
