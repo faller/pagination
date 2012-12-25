@@ -108,13 +108,20 @@
         $current.drags({
             axis: 'y',
             during: ( function() {
-                var internal = _.throttle( function( $data, scale ){
-                    var start= Math.min( Math.round( scale.y * $data.total ), $data.total - $data.limit );
+                var internal = _.throttle( function( $data, scale ) {
+                    var goal = Math.round( scale.y * $data.total );
+                    if ( goal === $data.total && $data.start >= $data.total - $data.limit ) {
+                        // let user reach bottom to the greatest extent
+                        goal = Math.min( $data.start + 1, $data.total - 1 );
+                    } else {
+                        // normal drags
+                        goal = Math.min( goal, $data.total - $data.limit );
+                    }
                     // change tip
-                    _tip.call( this, start );
-                    $data.start = start;
+                    _tip.call( this, goal );
+                    $data.start = goal;
                     // event bubbling
-                    this.trigger( 'change:start', start );
+                    this.trigger( 'change:start', goal );
                 }, EVENT_RATE );
                 return function( scale ) {
                     internal.call( that, $data, scale );
