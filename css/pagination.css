@@ -1,13 +1,14 @@
 .pagination,
-.pagination .screen                  { position: relative; }
-.pagination .screen .page.hidden     { display: none; }
-.pagination .screen .overlay         { display: none; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 1; }
-.pagination .screen .overlay.loading { display: block; background: transparent url('img/loading.gif') no-repeat center center; }
-.pagination .screen .overlay.error   { display: block; background: transparent url('img/error.gif')   no-repeat center center; }
-.pagination .screen .overlay.empty   { display: block; background: transparent url('img/empty.gif')   no-repeat center center; }
+.pagination .screen                     { position: relative; }
+.pagination .screen .page.hidden        { display: none; }
 .pagination .screen .page .item         { }   /* on your own */
 .pagination .screen .page .item.seleted { }   /* on your own */
 .pagination .screen .page .item.pointed { }   /* on your own */
+
+.pagination .overlay         { display: none; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; }
+.pagination .overlay.loading { display: block; background: transparent url('img/loading.gif') no-repeat center center; }
+.pagination .overlay.error   { display: block; background: transparent url('img/error.gif')   no-repeat center center; }
+.pagination .overlay.empty   { display: block; background: transparent url('img/empty.gif')   no-repeat center center; }
 
 .pagination .slider          { position: absolute; width: 23px; height: 100%; top: 0px;  right: -15px; display: none; }
 .pagination .slider .range   { position: absolute; width: 7px;  bottom: 23px; top: 23px; left: 8px; cursor: pointer; }
@@ -41,8 +42,9 @@
 
 
 /* ie sucks begin */
-.pagination                       { _zoom: 1; }
+.pagination                       { *zoom: 1; }
 .pagination .screen               { *width: 100%; }
+.pagination .overlay              { _width:  expression( this.parentNode.offsetWidth ); }
 .pagination .slider               { *height: expression( this.parentNode.offsetHeight ); }
 .pagination .slider .range        { *height: expression( this.parentNode.offsetHeight - 46 ); }
 .pagination .slider .current .tip { _padding: 0px 10px; }

@@ -25,12 +25,6 @@
     }
 })( function( $, _ ) {
 
-    var _template = [
-        '<div class="screen"></div>',
-        '<div class="slider"></div>',
-        '<div class="jumper"></div>'
-    ].join( '' );
-
     var methods = {
         init: function( opts ) {
             var options = $.extend( { mode: 'slider' }, opts );
@@ -41,9 +35,11 @@
                     // add namespace
                     $this.addClass( 'pagination' ) ;
                     // add doms if not exist
-                    $this.children().length || $this.html( _template );
+                    $this.find( '.screen' ).length || $this.append( '<div class="screen"></div>' );
+                    ( options.mode === 'slider' ) && ( ! $this.find( '.slider' ).length ) && $this.append( '<div class="slider"></div>' );
+                    ( options.mode === 'jumper' ) && ( ! $this.find( '.jumper' ).length ) && $this.append( '<div class="jumper"></div>' );
                     // bind events
-                    _bindEvents.call( $this, options.mode );
+                    _bindEvents.call( $this );
                 }
                 ( options.mode === 'slider' ) && $this.find( '.slider' ).pSlider( options );
                 ( options.mode === 'jumper' ) && $this.find( '.jumper' ).pJumper( options );
@@ -146,20 +142,20 @@
         }
     };
 
-    var _bindEvents = function( mode ) {
+    var _bindEvents = function() {
         var that = this,
             $screen = that.find( '.screen'),
             $slider = that.find( '.slider' ),
             $jumper = that.find( '.jumper' );
         $screen.on( 'reload', function( event, args ) {
             // reset slider
-            ( mode === 'slider' ) && $slider.pSlider( 'attr', {
+            $slider.length && $slider.pSlider( 'attr', {
                 start: 0,
                 limit: args.pageSize,
                 total: args.count,
                 silent: true
             });
-            ( mode === 'jumper' ) && $jumper.pJumper( 'attr', {
+            $jumper.length && $jumper.pJumper( 'attr', {
                 current: 0,
                 pageSize: args.pageSize,
                 count: args.count,
@@ -167,12 +163,12 @@
             });
             event.stopPropagation();
         });
-        ( mode === 'slider' ) && $slider.on( 'change:start', function( event, start ) {
+        $slider.length && $slider.on( 'change:start', function( event, start ) {
             // point at the given location
             $screen.pScreen( 'locate', start );
             event.stopPropagation();
         });
-        ( mode === 'jumper' ) && $jumper.on( 'change:current', function( event, current ) {
+        $jumper.length && $jumper.on( 'change:current', function( event, current ) {
             // point at the given location
             $screen.pScreen( 'locate', current );
             event.stopPropagation();

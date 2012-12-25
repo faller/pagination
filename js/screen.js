@@ -29,7 +29,7 @@
                     // add namespace
                     $this.data( NAME_SPACE, $data );
                     // add doms if not exist
-                    $this.children().length || $this.html( '<div class="overlay"></div>' );
+                    $this.parent().find( '.overlay' ).length || $this.parent().append( '<div class="overlay"></div>' );
                     // bind events
                     _bindEvents.call( $this );
                 }
@@ -253,7 +253,7 @@
     })();
 
     var _createPage = function( pageNumber ) {
-        var tagName = this.find( '.overlay' ).prop( 'tagName' ).toLowerCase();    // use overlay's tagName for custom dom structure
+        var tagName = ( this.prop( 'tagName' ).toLowerCase() === 'table' ) ? 'tbody' : 'div';
         var $page = $( '<' + tagName + ' class="page"></' + tagName + '>' );
         $page.attr( 'id', PAGE_ID_PREFIX + pageNumber );
         this.append( $page );
@@ -300,13 +300,13 @@
     };
 
     var _setOverlay = function( className, operation ) {
-        var $overlay = this.find( '.overlay' );
+        var $overlay = this.parent().find( '.overlay' );
         if ( operation === 'remove' ) {
             $overlay.removeClass( className );
         } else {
             $overlay.addClass( className );
-            var parentHeight = this.parent().css( 'height' );
-            $overlay.css( 'height', ( parentHeight === '0px' ) ? '300px' : parentHeight );
+            var parentHeight = this.parent().outerHeight();
+            $overlay.css( 'height', parentHeight ? parentHeight + 'px' : '300px' );
         }
     };
 
