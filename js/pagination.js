@@ -50,8 +50,8 @@
         destroy: function() {
             return this.each( function() {
                 var $this = $( this),
-                    $screen = $this.find( '.screen'),
-                    $slider = $this.find( '.slider'),
+                    $screen = $this.find( '.screen' ),
+                    $slider = $this.find( '.slider' ),
                     $jumper = $this.find( '.jumper' );
                 // remove namespace
                 $this.removeClass( 'pagination' );
@@ -97,7 +97,7 @@
         // params eg. 'type asc, time desc' or
         //            [{key:'type',order:'asc'},{key:'time',order:'desc'}]
         sort: function( sort ) {
-            var $screen = $( this ).find( '.screen'),
+            var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
             if ( sort ) {
                 params.orderBy = _.isString( sort ) ? sort : _sortTransformer( sort );
@@ -112,7 +112,7 @@
         // params eg. 'type lte orange, time gt 0' or
         //            [{key:'type',operator:'lte',value:'orange'},{key:'time',operator:'gt',value:0}]
         query: function( query ) {
-            var $screen = $( this ).find( '.screen'),
+            var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
             if ( query ) {
                 params.orderBy = _.isString( query ) ? query : _queryTransformer( query );
