@@ -13,7 +13,7 @@ require.config({
         bootstrap: {
             deps: [ 'jquery' ]
         },
-        'jquery.mousewheel': {
+        'jquery-mousewheel': {
             deps: [ 'jquery' ]
         }
     }
