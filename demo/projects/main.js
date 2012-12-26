@@ -27,7 +27,7 @@ require( [ 'jquery', 'underscore', 'utils/mocker', 'libs/pagination' ], function
 
     var onDataCallback = function( data ) {
         var template = _.template( $( '#projectTemplate' ).html(), data );
-        return $(template);
+        return $( template );
     };
 
     var dataSource = Mocker.mock({
@@ -43,8 +43,8 @@ require( [ 'jquery', 'underscore', 'utils/mocker', 'libs/pagination' ], function
             key: 'reason',
             values: [ '设计错误', '设计漏项', '专业配合', '材料变化', '设计改进', '材料代用', '其他' ]
         },{
-            key: 'month',
-            values: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11, 12 ]
+            key: 'time',
+            values: { min: 1325347200000, max: 1356883200000 }
         },{
             key: 'company',
             values: [ '深圳供电局', '广东供电公司', '广西供电公司', '云南供电公司', '海南供电公司', '贵州供电公司' ]
@@ -53,9 +53,11 @@ require( [ 'jquery', 'underscore', 'utils/mocker', 'libs/pagination' ], function
             values: [ 110, 220, 500 ]
         },{
             key: 'money',
-            values: [ 1012121, 15415001, 545454151, 545451, 893141, 5487911, 348976168, 49841196, 9781154, 487871, 8754518 ]
+            values: { min: 1, max: 100000 }
         }],
-        rate: 1000
+        onCreate: function( item ) {
+            item.time = ( new Date( item.time ) ).toLocaleDateString();
+        }
     });
 
     $( document ).ready( function() {

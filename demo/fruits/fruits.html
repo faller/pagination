@@ -39,12 +39,10 @@
             var dataSource = Mocker.mock({
                 amount: 100,
                 idAttribute: 'id',
-                timeAttribute: 'time',
                 randomAttributes: [{
                     key: 'type',
                     values: [ 'apple', 'banana', 'orange', 'grapes' ]
-                }],
-                rate: 1000
+                }]
             });
 
             $( document ).ready( function() {
@@ -52,8 +50,8 @@
                     dataSource: dataSource,            // can be a function or url
                     onData: onDataCallback,            // a callback return dom element
                     params: {
-                        query: 'type gte {a}, type lte {z}, time gt {0}',
-                        sort: 'type asc, time desc'
+                        query: 'type gte {a}, type lte {z}, id gt {0}',
+                        sort: 'type desc, id asc'
                     },
                     pageSize: 6,
                     buffered: true,

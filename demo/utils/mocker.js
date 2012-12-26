@@ -5,18 +5,23 @@
 
 //    create eg.
 //    var fruitsDataSource = Mocker.mock({
-//        template: { fact: 'suck' },
+//        template: { say: 'hello' },
 //        amount: 100,
 //        idAttribute: 'id',                                      // or json full format: { key: 'id', prefix: 'fruit_' }
-//        timeAttribute: 'time',
 //        randomAttributes: [{
 //            key: 'type',
 //            values: [ 'apple', 'banana', 'orange', 'grapes' ]
 //        },{
 //            key: 'taste',
 //            values: [ 'awesome', 'good', 'shit smells' ]
+//        },{
+//            key: 'time',
+//            values: { min: 1325347200000, max: 1356883200000 }
 //        }],
-//        rate: 1000
+//        onCreate: function( item ) {                            // item on create callback
+//            item.say = 'hi';
+//        },
+//        delay: 1000                                             // simulate request & response delay
 //    });
 
 //    or with AMD.
@@ -87,8 +92,13 @@
             }
             configs.timeAttribute && ( item[ configs.timeAttribute ] = timeSeed - 1000 * i );
             _.each( configs.randomAttributes, function( randomAttribute ) {
-                item[ randomAttribute.key ] = randomAttribute.values[ _.random( 0, randomAttribute.values.length - 1 ) ];
-        });
+                if ( _.isArray( randomAttribute.values ) ) {
+                    item[ randomAttribute.key ] = randomAttribute.values[ random( 0, randomAttribute.values.length - 1 ) ];
+                } else if ( _.isObject( randomAttribute.values ) ) {
+                    item[ randomAttribute.key ] = random( randomAttribute.values.min, randomAttribute.values.max );
+                }
+            });
+            _.isFunction( configs.onCreate ) && configs.onCreate( item );
             items.unshift( item );
         }
         // to shuffle items order
@@ -196,6 +206,19 @@
             });
     };
 
+    // underscore has bug, use it instead
+    var random = function( min, max ) {
+        if ( min == null && max == null ) {
+            max = 1;
+        }
+        min = +min || 0;
+        if ( max == null ) {
+            max = min;
+            min = 0;
+        }
+        return min + Math.floor( Math.random() * ( ( +max || 0 ) - min + 1) );
+    };
+
     var deepClone = function( obj ) {
         if ( _.isArray( obj ) ) {
             var out = [];
@@ -217,7 +240,7 @@
 
     return {
         mock: function( cfgs ) {
-            var configs = _.extend( { template: {}, rate: 1000 }, cfgs );
+            var configs = _.extend( { template: {}, delay: 1000 }, cfgs );
             var items = generateItems( configs );
             return function dataSource( args ) {
                 setTimeout( function() {
@@ -242,7 +265,7 @@
                         };
                     }
                     _.isFunction( args.success ) && args.success( result );
-                }, configs.rate);
+                }, configs.delay );
             };
         }
     };
