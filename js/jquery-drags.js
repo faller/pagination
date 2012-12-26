@@ -42,14 +42,14 @@
                     var goal = self.position.top + delta;
                     var top = Math.max( goal, 0 ) && Math.min( goal, parent.height - self.height );
                     scale.y = top / parent.height;
-                    bubbleScale.y = ( goal > parent.height ) ? 1 : scale.y;
+                    bubbleScale.y = ( goal > parent.height - self.height ) ? 1 : scale.y;
                 }
                 if ( options.axis !== 'y' ) {
                     var delta = event.pageX - eventBefore.pageX;
                     var goal = self.position.left + delta;
                     var left = Math.max( goal, 0 ) && Math.min( goal, parent.width - self.width );
                     scale.x = left / parent.width;
-                    bubbleScale.x = ( goal > parent.width ) ? 1 : scale.x;
+                    bubbleScale.x = ( goal > parent.width - self.width ) ? 1 : scale.x;
                 }
                 $this.css({
                     top: ( scale.y === undefined ) ? undefined : scale.y * 100 + '%',
