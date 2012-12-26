@@ -185,7 +185,7 @@
         $data.count = null;
         $data.buffer = {};
         var $page = _createPage.call( that, 0 );
-        pageMapping.currentPage = $page;
+        pageMapping.currentPage = $page.removeClass( 'hidden' );;
         _completePage.call( that, $page, function() {
             _locate.call( that, 0 );
         });
@@ -254,7 +254,7 @@
 
     var _createPage = function( pageNumber ) {
         var tagName = ( this.prop( 'tagName' ).toLowerCase() === 'table' ) ? 'tbody' : 'div';
-        var $page = $( '<' + tagName + ' class="page"></' + tagName + '>' );
+        var $page = $( '<' + tagName + ' class="page hidden"></' + tagName + '>' );
         $page.attr( 'id', PAGE_ID_PREFIX + pageNumber );
         this.append( $page );
         this.data( NAME_SPACE ).pageMapping[ pageNumber ] = $page;
