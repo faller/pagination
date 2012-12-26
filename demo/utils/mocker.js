@@ -156,6 +156,7 @@
 
             // sort the keys of groups
             var keys = _.keys( groups ).sort( function( a, b ) {
+                ( /^[-+]?[0-9]+(\.[0-9]+)?$/.test( a + b) ) && ( a = parseFloat( a ), b = parseFloat( b ) );
                 var direction = ( currentOrder.order === 'asc' ) ? 1 : -1;
                 var result = ( a > b ) ? 1 : -1;
                 return direction * result;
