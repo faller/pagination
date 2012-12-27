@@ -15,5 +15,5 @@ Pagination with data buffering and optional slider style
           pageSize: 10,
           buffered: true,                    // smart enough to pre-read and cache data
           mode: 'slider'                     // try 'slider' in narrow space and 'jumper' in waterfall page
-    }
+    };
   ```
