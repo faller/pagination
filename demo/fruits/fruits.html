@@ -22,12 +22,12 @@
         <script src="../utils/mocker.js"></script>
         <script type="text/template" id="fruitTemplate">
             <div class="fruit">
-                <span>hello, {{= type }}, with id {{= id }}</span>
+                <span>hello, {{type}}, with id {{id}}</span>
             </div>
         </script>
         <script type="text/javascript">
             _.templateSettings = {
-                interpolate : /\{\{=(.+?)\}\}/g
+                interpolate : /\{\{(.+?)\}\}/g
             };
 
             var onDataCallback = function( data ) {

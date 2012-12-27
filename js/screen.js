@@ -272,22 +272,24 @@
         }, $data.params );
 
         var success = function( data ) {
-            var $doms = _.map( data.list, function( item ) {
+            var $doms = [];
+            _processLargeArray( data.list, function( item ) {
                 var $dom = $( $data.onData( item ) );
                 $dom.addClass( 'item' );
-                return $dom;
+                $doms.push( $dom );
+            }, function() {
+                _setOverlay.call( that, 'empty', _.isEmpty( $doms ) ? 'add' : 'remove' );
+                _append.call( that, $page, $doms );
+                _setOverlay.call( that, 'loading', 'remove' );
+                if ( data.count != null ) {
+                    $data.count = data.count;
+                    that.trigger( 'reload', {
+                        pageSize: $data.pageSize,
+                        count: $data.count
+                    });
+                }
+                _.isFunction( callback ) && callback( $page );
             });
-            _setOverlay.call( that, 'empty', _.isEmpty( $doms ) ? 'add' : 'remove' );
-            _append.call( that, $page, $doms );
-            _setOverlay.call( that, 'loading', 'remove' );
-            if ( data.count != null ) {
-                $data.count = data.count;
-                that.trigger( 'reload', {
-                    pageSize: $data.pageSize,
-                    count: $data.count
-                });
-            }
-            _.isFunction( callback ) && callback( $page );
         };
 
         var error = function() {
@@ -395,6 +397,23 @@
 
     var _pageNumber = function( $page ) {
         return parseInt( $page.attr( 'id' ).substring( PAGE_ID_PREFIX.length ) );
+    };
+
+    var _processLargeArray = function( array, handler, callback ) {
+        var maxtime = 100;
+        var delay = 20;
+        var queue = array.concat();
+        setTimeout( function() {
+            var endtime = new Date().getTime()  + maxtime;
+            do {
+                handler( queue.shift() );
+            } while ( queue.length> 0 && endtime > new Date().getTime() );
+            if ( queue.length > 0 ) {
+                setTimeout( arguments.callee, delay );
+            } else {
+                if ( callback ) callback();
+            }
+        }, 0 );
     };
 
 });
