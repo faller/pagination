@@ -263,7 +263,8 @@
 
     var _completePage = function( $page, callback ) {
         var that = this,
-            $data = that.data( NAME_SPACE );
+            $data = that.data( NAME_SPACE),
+            pageSize = $data.pageSize;
 
         var params = _.extend({
             skip: _pageNumber( $page ) * $data.pageSize,
@@ -272,14 +273,25 @@
         }, $data.params );
 
         var success = function( data ) {
-            var $doms = [];
+            _setOverlay.call( that, 'empty', _.isEmpty( data.list ) ? 'add' : 'remove' );
+            var $currentPage = $page,
+                currentSize  = 0;
             _processLargeArray( data.list, function( item ) {
-                var $dom = $( $data.onData( item ) );
-                $dom.addClass( 'item' );
-                $doms.push( $dom );
+                var $dom = $( $data.onData( item ) ).addClass( 'item' );
+                if ( currentSize < pageSize ) {
+                    $currentPage.append( $dom );
+                    currentSize++;
+                } else {
+                    var nextPageNumber = _pageNumber( $currentPage ) + 1;
+                    if ( !$data.pageMapping[ nextPageNumber ] ) {
+                        $currentPage = _createPage.call( that, nextPageNumber );
+                        $currentPage.append( $dom );
+                        currentSize = 1;
+                    } else {
+                        return false;
+                    }
+                }
             }, function() {
-                _setOverlay.call( that, 'empty', _.isEmpty( $doms ) ? 'add' : 'remove' );
-                _append.call( that, $page, $doms );
                 _setOverlay.call( that, 'loading', 'remove' );
                 if ( data.count != null ) {
                     $data.count = data.count;
@@ -368,20 +380,6 @@
         };
     })();
 
-    var _append = function( $page, $doms ) {
-        var $data = this.data( NAME_SPACE ),
-            pageSize = $data.pageSize;
-        for (var i = 0, length = Math.min( pageSize, $doms.length ); i < length; i++ ) {
-            $page.append( $doms.shift() );
-        }
-        if ( $doms.length >= pageSize ) {
-            var nextPageNumber = _pageNumber( $page ) + 1;
-            if ( !$data.pageMapping[ nextPageNumber ] ){
-                arguments.callee.call( this, _createPage.call( this, nextPageNumber ), $doms );
-            }
-        }
-    };
-
     var _dataSourceTransformer = function( dataSource ) {
         return dataSource && _.isFunction( dataSource ) ? dataSource : function( args ) {
             $.ajax({
@@ -399,21 +397,24 @@
         return parseInt( $page.attr( 'id' ).substring( PAGE_ID_PREFIX.length ) );
     };
 
-    var _processLargeArray = function( array, handler, callback ) {
+    var _processLargeArray = (function() {
         var maxtime = 100;
         var delay = 20;
-        var queue = array.concat();
-        setTimeout( function() {
-            var endtime = new Date().getTime()  + maxtime;
-            do {
-                handler( queue.shift() );
-            } while ( queue.length> 0 && endtime > new Date().getTime() );
-            if ( queue.length > 0 ) {
-                setTimeout( arguments.callee, delay );
-            } else {
-                if ( callback ) callback();
-            }
-        }, 0 );
-    };
+        return function( array, handler, callback ) {
+            var i = 0, length = array.length;
+            setTimeout( function() {
+                var endtime = new Date().getTime() + maxtime;
+                while ( i < length && endtime > new Date().getTime() ) {
+                    var result = handler( array[ i ] );
+                    i = ( result === false ) ? length : ++i;
+                };
+                if ( i < length ) {
+                    setTimeout( arguments.callee, delay );
+                } else {
+                    if ( _.isFunction( callback ) ) callback();
+                }
+            }, 0 );
+        };
+    })();
 
 });
