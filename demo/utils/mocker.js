@@ -49,7 +49,7 @@
 //    save eg.
 //    fruitsDataSource({
 //        params: {
-//            save: {                                             // or string format: "{ 'type': 'orange', 'taste': 'bad'}"
+//            save: {                                             // or string format: "{ 'type': 'orange', 'taste': 'bad' }"
 //                type: 'apple',
 //                taste: 'awesome',
 //                time: new Date().getTime()
