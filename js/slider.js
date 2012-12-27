@@ -110,12 +110,10 @@
             during: ( function() {
                 var internal = _.throttle( function( $data, scale ) {
                     var goal = Math.round( scale.y * $data.total );
-                    if ( goal === $data.total && $data.start >= $data.total - $data.limit ) {
+                    var max = Math.max( $data.total - $data.limit, 0 );
+                    if ( goal > max ) {
                         // let user reach bottom to the greatest extent
-                        goal = Math.min( $data.start + 1, $data.total - 1 );
-                    } else {
-                        // normal drags
-                        goal = Math.min( goal, $data.total - $data.limit );
+                        goal = Math.min( Math.max( max, $data.start + 1 ), $data.total - 1 );
                     }
                     // change tip
                     _tip.call( this, goal );
