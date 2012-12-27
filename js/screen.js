@@ -178,7 +178,7 @@
     var _reload = function() {
         // empty container, create and complete page, locate 0
         var that = this,
-            $data = that.data( NAME_SPACE),
+            $data = that.data( NAME_SPACE ),
             pageMapping = $data.pageMapping = {};
 
         that.find( '.page' ).remove();
@@ -263,7 +263,7 @@
 
     var _completePage = function( $page, callback ) {
         var that = this,
-            $data = that.data( NAME_SPACE);
+            $data = that.data( NAME_SPACE );
 
         var params = _.extend({
             skip: _pageNumber( $page ) * $data.pageSize,
@@ -320,7 +320,7 @@
         };
 
         var _prepareBuffer = function( params ) {
-            var $data = this.data( NAME_SPACE),
+            var $data = this.data( NAME_SPACE ),
                 pageSize = $data.pageSize,
                 pageMapping = $data.pageMapping,
                 buffer = $data.buffer;
@@ -367,7 +367,7 @@
     })();
 
     var _append = function( $page, $doms ) {
-        var $data = this.data( NAME_SPACE),
+        var $data = this.data( NAME_SPACE ),
             pageSize = $data.pageSize;
         for (var i = 0, length = Math.min( pageSize, $doms.length ); i < length; i++ ) {
             $page.append( $doms.shift() );

@@ -5,14 +5,14 @@
 (function ( factory ) {
     if ( typeof define === 'function' && define.amd ) {
         // AMD. Register as an anonymous module.
-        define( [ 'jquery', 'underscore', 'jquery-mousewheel', './jquery-drags' ], factory );
+        define( [ 'jquery', 'underscore', 'jquery-mousewheel' ], factory );
     } else {
         // Browser globals
         factory( jQuery, _ );
     }
 })( function( $, _ ) {
 
-    var NAMESPACE  = 'pSlider',
+    var NAME_SPACE = 'pSlider',
         EVENT_RATE = 200;
 
     var _template = [
@@ -37,11 +37,11 @@
             var options = $.extend( { start:0, limit:10, total:0 }, opts );
             return this.each( function() {
                 var $this = $( this ),
-                    $data = $this.data( NAMESPACE );
+                    $data = $this.data( NAME_SPACE );
                 // If the plugin hasn't been initialized yet
                 if ( !$data ) {
                     // add namespace
-                    $this.data( NAMESPACE, {} );
+                    $this.data( NAME_SPACE, {} );
                     // add doms if not exist
                     $this.children().length || $this.html( _template );
                     // bind events
@@ -62,7 +62,7 @@
                 // remove event handlers
                 $this.parent().off( 'mousewheel' );
                 // remove namespace
-                $this.removeData( NAMESPACE );
+                $this.removeData( NAME_SPACE );
                 // remove child doms
                 $this.empty();
             });
@@ -81,13 +81,13 @@
         }
     };
 
-    $.fn[ NAMESPACE ] = function( method ) {
+    $.fn[ NAME_SPACE ] = function( method ) {
         if ( methods[ method ] ) {
             return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
         } else if ( typeof method === 'object' || !method ) {
             return methods.init.apply( this, arguments );
         } else {
-            $.error( 'Method ' +  method + ' does not exist on jQuery.' + NAMESPACE );
+            $.error( 'Method ' +  method + ' does not exist on jQuery.' + NAME_SPACE );
         }
     };
 
@@ -95,7 +95,7 @@
         var that = this,
             $range = that.find( '.range' ),
             $current = that.find( '.current'),
-            $data = that.data( NAMESPACE ),
+            $data = that.data( NAME_SPACE ),
             $parent = that.parent();
 
         $range.on( 'click', function( event ) {
@@ -104,8 +104,8 @@
             event.stopPropagation();    // excluding the click within current
         });
 
-        // jquery drags plugin was needed
-        $current.drags({
+        // this plugin was defined below
+        $current.pDrags({
             axis: 'y',
             during: ( function() {
                 var internal = _.throttle( function( $data, scale ) {
@@ -154,7 +154,7 @@
 
     var _attr = function( key, value ) {
         var $current = this.find( '.current' ),
-            $data = this.data( NAMESPACE );
+            $data = this.data( NAME_SPACE );
         if ( arguments.length === 1 && typeof key === 'string' ) {
             return $data[ key ];
         }
@@ -202,9 +202,61 @@
     var _tip = function ( count ) {
         var $head = this.find( '.current .head .tip' ),
             $tail = this.find( '.current .tail .tip' ),
-            $data = this.data( NAMESPACE );
+            $data = this.data( NAME_SPACE );
         $head.html( count );
         $tail.html( Math.min( count + $data.limit, Math.round( $data.total ) ) );
+    };
+
+    // simple drags within parent
+    $.fn.pDrags = function( opts ) {
+        var options = $.extend( {}, opts );
+        return this.each( function() {
+            var $this = $( this),
+                isDragging = false,
+                eventBefore, self, parent;
+            $this.on( "mousedown" , function( event ) {
+                isDragging = true;
+                $this.parent().addClass( 'dragging' );
+                eventBefore = event;
+                self = { height: $this.height(), width: $this.width(), position: $this.position() };
+                parent = { height: $this.parent().height(), width: $this.parent().width() };
+                // prevent text selection (except IE)
+                event.preventDefault();
+                // prevent text selection in IE
+                document.onselectstart = function () { return false; };
+            });
+            $( document ).on( "mouseup", function() {
+                if ( !isDragging ) return;
+                isDragging = false;
+                $this.parent().removeClass( 'dragging' );
+                // enable IE text selection
+                document.onselectstart = null;
+            }).on( "mousemove", function( event ) {
+                if ( !isDragging ) return;
+                var scale = {}, bubbleScale = {};
+                if ( options.axis !== 'x' ) {
+                    var delta = event.pageY - eventBefore.pageY;
+                    var goal = self.position.top + delta;
+                    var top = Math.max( goal, 0 ) && Math.min( goal, parent.height - self.height );
+                    scale.y = top / parent.height;
+                    bubbleScale.y = ( goal > parent.height - self.height ) ? 1 : scale.y;
+                }
+                if ( options.axis !== 'y' ) {
+                    var delta = event.pageX - eventBefore.pageX;
+                    var goal = self.position.left + delta;
+                    var left = Math.max( goal, 0 ) && Math.min( goal, parent.width - self.width );
+                    scale.x = left / parent.width;
+                    bubbleScale.x = ( goal > parent.width - self.width ) ? 1 : scale.x;
+                }
+                $this.css({
+                    top: ( scale.y === undefined ) ? undefined : scale.y * 100 + '%',
+                    left : ( scale.x === undefined ) ? undefined : scale.x * 100 + '%'
+                });
+                if ( $.isFunction( options.during ) ) {
+                    options.during( bubbleScale );
+                }
+            });
+        });
     };
 
 });

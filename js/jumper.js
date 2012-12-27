@@ -12,7 +12,7 @@
     }
 })( function( $, _ ) {
 
-    var NAMESPACE     = 'pJumper',
+    var NAME_SPACE    = 'pJumper',
         DEBOUNCE_RATE = 500;         // prevent frequently input
 
     var _template = [
@@ -31,11 +31,11 @@
             var options = $.extend( { current:0, count:0 }, opts );
             return this.each( function() {
                 var $this = $( this ),
-                    $data = $this.data( NAMESPACE );
+                    $data = $this.data( NAME_SPACE );
                 // If the plugin hasn't been initialized yet
                 if ( !$data ) {
                     // add namespace
-                    $this.data( NAMESPACE, {} );
+                    $this.data( NAME_SPACE, {} );
                     // add doms if not exist
                     $this.children().length || $this.html( _template );
                     // bind events
@@ -54,7 +54,7 @@
             return this.each( function() {
                 var $this = $( this );
                 // remove namespace
-                $this.removeData( NAMESPACE );
+                $this.removeData( NAME_SPACE );
                 // remove child doms
                 $this.empty();
             });
@@ -66,19 +66,19 @@
         }
     };
 
-    $.fn[ NAMESPACE ] = function( method ) {
+    $.fn[ NAME_SPACE ] = function( method ) {
         if ( methods[ method ] ) {
             return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
         } else if ( typeof method === 'object' || !method ) {
             return methods.init.apply( this, arguments );
         } else {
-            $.error( 'Method ' +  method + ' does not exist on jQuery.' + NAMESPACE );
+            $.error( 'Method ' +  method + ' does not exist on jQuery.' + NAME_SPACE );
         }
     };
 
     var _bindEvents = function() {
         var that = this,
-            $data = that.data( NAMESPACE ),
+            $data = that.data( NAME_SPACE ),
             $prev = that.find( '.prev' ),
             $next = that.find( '.next' ),
             $current = that.find( '.current' ),
@@ -116,7 +116,7 @@
     };
 
     var _attr = function( key, value ) {
-        var $data = this.data( NAMESPACE );
+        var $data = this.data( NAME_SPACE );
         if ( arguments.length === 1 && typeof key === 'string' ) {
             return $data[ key ];
         }
