@@ -12,14 +12,13 @@
     }
 })( function( $, _ ) {
 
-    var NAME_SPACE         = 'pScreen',
-        PAGE_ID_PREFIX     = 'page-',
-        BUFFER_PAGE_COUNT  = 2,     // buffer pages for pre-reading
-        DEBOUNCE_RATE      = 500;   // prevent frequently fetch
+    var NAME_SPACE     = 'pScreen',
+        PAGE_ID_PREFIX = 'page-',
+        DEBOUNCE_RATE  = 500;   // prevent frequently fetch
 
     var methods = {
         init: function( opts ) {
-            var options = $.extend( { pageSize: 10, buffered: true }, opts );
+            var options = $.extend( { pageSize: 10, buffered: true, bufferPageAmount: 2, initPageAmount: 1 }, opts );
             return this.each( function() {
                 var $this = $( this ),
                     $data = $this.data( NAME_SPACE );
@@ -36,7 +35,8 @@
                 $.extend( $data, {
                     buffered: options.buffered,
                     pageSize: options.pageSize,
-                    limit: options.limit,
+                    bufferPageAmount: options.bufferPageAmount,
+                    initPageAmount: options.initPageAmount,
                     onData: options.onData,
                     dataSource: _dataSourceTransformer( options.dataSource ),
                     params: options.params
@@ -95,10 +95,10 @@
         select: function( selections ) {
             if ( selections != null ) {
                 return this.each( function() {
-                    var $this = $( this),
-                        $data = $this.data( NAME_SPACE );
+                    var $this = $( this );
                     $this.find( '.item' ).removeClass( 'selected' );
                     _.isArray( selections ) || ( selections = [ selections ] );
+                    if ( _.isEmpty( selections ) ) return;
                     var selector = _.reduce( _.map( selections , function( selection ) {
                         return '.item:eq(' + selection + ')';
                     }), function( memo, value ){
@@ -263,17 +263,22 @@
 
     var _completePage = function( $page, callback ) {
         var that = this,
-            $data = that.data( NAME_SPACE),
+            $data = that.data( NAME_SPACE ),
             pageSize = $data.pageSize;
 
         var params = _.extend({
             skip: _pageNumber( $page ) * $data.pageSize,
-            limit: $data.limit ? $data.limit : $data.pageSize,
+            limit: $data.initPageAmount ? ( $data.pageSize * $data.initPageAmount ) : $data.pageSize,
             count: ( $data.count == null )
         }, $data.params );
 
         var success = function( data ) {
-            _setOverlay.call( that, 'empty', _.isEmpty( data.list ) ? 'add' : 'remove' );
+            if ( _.isEmpty( data.list ) ) {
+                _setOverlay.call( that, 'empty' );
+            } else {
+                $data.initPageAmount = null;
+                _setOverlay.call( that, 'empty', 'remove' );
+            }
             var $currentPage = $page,
                 currentSize  = 0;
             _processLargeArray( data.list, function( item ) {
@@ -336,6 +341,7 @@
         var _prepareBuffer = function( params ) {
             var $data = this.data( NAME_SPACE ),
                 pageSize = $data.pageSize,
+                bufferPageAmount = $data.bufferPageAmount,
                 pageMapping = $data.pageMapping,
                 buffer = $data.buffer;
                 maxPageNumber = Math.floor( $data.count - 1 / pageSize ),
@@ -344,7 +350,7 @@
             if ( params.skip === 0 ) return;
             var direction = currentPageNumber - lastPageNumber;
             if ( direction === 1 || direction === -1 ) {
-                for ( var i = 0; i < BUFFER_PAGE_COUNT; i++ ) {
+                for ( var i = 0; i < bufferPageAmount; i++ ) {
                     (function( bufferPageNumber ){
                         if ( bufferPageNumber >= 0 && bufferPageNumber <= maxPageNumber && !buffer[bufferPageNumber] && !pageMapping[ bufferPageNumber ] ) {
                             var tempParams = _.clone( params );

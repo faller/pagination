@@ -4,15 +4,17 @@
 //
 //    usage eg.
 //    $( '#page' ).pagination({
-//          dataSource: 'xxxx.action',         // can be a function or url
-//          onData: onDataCallback,            // a callback return dom element
-//          params: {
+//          dataSource: 'xxxx.action',                            // can be a url or a function of 'Mocker'
+//          params: {                                             // params here will be passed to dataSource
 //              query: 'type gte {a}, type lte {z}, time gt {0}',
 //              sort: 'type asc, time desc'
 //          },
+//          onData: onDataCallback,                               // a callback returns dom element
+//          mode: 'slider',                                       // try 'slider' in narrow space and 'jumper' in waterfall page
 //          pageSize: 10,
-//          buffered: true,                    // smart enough to pre-read and cache data
-//          mode: 'slider'                     // try 'slider' in narrow space and 'jumper' in waterfall page
+//          initPageAmount: 1                                     // default: 1
+//          buffered: true,                                       // smart enough to pre-read and cache data
+//          bufferPageAmount: 2,                                  // default: 2
 //    }
 
 (function ( factory ) {
@@ -64,7 +66,7 @@
         },
 
         // set or get the 'onData' callback
-        // the callback function receives a json data from dataSource and should return a jquery dom
+        // the callback function receives a json data from dataSource and should return a dom
         // you'd better bind events to the parent for better performance
         // eg. $( '#page' ).on( 'click', '.item', function( event ) {} );
         onData: function( callback ) {
@@ -72,7 +74,7 @@
             return $screen.pScreen( 'onData', callback );
         },
 
-        // set or get the dataSource, it could be a function or a url
+        // set or get the dataSource, it can be a url or a function of 'Mocker'
         // screen will reload after changing dataSource
         // dataSource should handle ajax params like this:
         //    params: {
@@ -85,7 +87,7 @@
         // and returns data like this:
         //    data: {
         //        count: 100,
-        //        list: [{foo:'bar'},{foo:'bar'}]
+        //        list: [ { foo: 'bar' }, { foo: 'bar' } ]
         //    }
         dataSource: function( dataSource ) {
             var $screen = $( this ).find( '.screen' );
@@ -95,7 +97,7 @@
         // set or get the 'sort' of dataSource params
         // screen will reload after changing params
         // params eg. 'type asc, time desc' or
-        //            [{key:'type',order:'asc'},{key:'time',order:'desc'}]
+        //            [ { key: 'type', order: 'asc' }, { key: 'time', order: 'desc' } ]
         sort: function( sort ) {
             var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
@@ -109,8 +111,8 @@
 
         // set or get the 'query' of dataSource params
         // screen will reload after changing params
-        // params eg. 'type lte orange, time gt 0' or
-        //            [{key:'type',operator:'lte',value:'orange'},{key:'time',operator:'gt',value:0}]
+        // params eg. 'type lte {orange}, time gt {0}' or
+        //            [ { key: 'type', operator: 'lte', value: 'orange' }, { key: 'time', operator: 'gt', value: 0 } ]
         query: function( query ) {
             var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
@@ -123,8 +125,8 @@
         },
 
         // set or get the selections
-        // elements will join selections after 'click' or 'touch' events
-        // params eg. ['xxid','xxid2']
+        // $doms will join selections after 'click' or 'touch' events
+        // params eg. [ 0, 1 ] for selecting the first and second
         select: function( selections ) {
             var $screen = $( this ).find( '.screen' );
             return $screen.pScreen( 'select', selections );

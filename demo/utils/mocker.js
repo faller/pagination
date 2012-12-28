@@ -251,7 +251,7 @@
                     } else if ( args.params.remove ) {
                         var query = _.isArray( args.params.remove ) ? args.params.remove : parseQuery( args.params.remove );
                         result = removeItems( items, query );
-                    } else if ( args.params.query != null || args.params.sort != null ) {
+                    } else {
                         var params = _.extend( { skip: 0, limit: 1000000 }, args.params );
                         var query = _.isArray( params.query ) ? params.query : parseQuery( params.query );
                         var matchedItems = queryItems( items, query );
