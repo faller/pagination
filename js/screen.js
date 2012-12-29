@@ -411,7 +411,7 @@
             setTimeout( function() {
                 var endtime = new Date().getTime() + maxtime;
                 while ( i < length && endtime > new Date().getTime() ) {
-                    var result = handler( array[ i ] );
+                    var result = handler( array[ i ], i, array );
                     i = ( result === false ) ? length : ++i;
                 };
                 if ( i < length ) {
