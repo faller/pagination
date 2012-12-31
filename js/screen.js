@@ -33,13 +33,14 @@
                     _bindEvents.call( $this );
                 }
                 $.extend( $data, {
-                    buffered: options.buffered,
-                    pageSize: options.pageSize,
-                    bufferPageAmount: options.bufferPageAmount,
-                    initPageAmount: options.initPageAmount,
-                    onData: options.onData,
                     dataSource: _dataSourceTransformer( options.dataSource ),
-                    params: options.params
+                    params: options.params,
+                    method: options.method,
+                    onData: options.onData,
+                    pageSize: options.pageSize,
+                    initPageAmount: options.initPageAmount,
+                    buffered: options.buffered,
+                    bufferPageAmount: options.bufferPageAmount
                 });
                 _reload.call( $this );
             });
@@ -330,9 +331,10 @@
     };
 
     var _fetchData = (function() {
-        var _doFetch = function( dataSource, params, success, error ) {
+        var _doFetch = function( dataSource, params, method, success, error ) {
             dataSource({
                 params: params,
+                method: method,
                 success: success,
                 error: error
             });
@@ -355,7 +357,7 @@
                         if ( bufferPageNumber >= 0 && bufferPageNumber <= maxPageNumber && !buffer[bufferPageNumber] && !pageMapping[ bufferPageNumber ] ) {
                             var tempParams = _.clone( params );
                             tempParams.skip = pageSize * bufferPageNumber;
-                            _doFetch( $data.dataSource, tempParams, function( data ) {
+                            _doFetch( $data.dataSource, tempParams, $data.method, function( data ) {
                                 buffer[ bufferPageNumber ] = data;
                             });
                         }
@@ -375,7 +377,7 @@
                     delete buffer[ currentPageNumber ];
                     _prepareBuffer.call( that, params );
                 } else {
-                    _doFetch( $data.dataSource, params, function( data ) {
+                    _doFetch( $data.dataSource, params, $data.method, function( data ) {
                         success( data );
                         _prepareBuffer.call( that, params );
                     }, error );
@@ -391,6 +393,7 @@
             $.ajax({
                 url: dataSource,
                 data: _.extend( {}, args.params ),
+                type: args.method ? args.method.toUpperCase() : 'GET',
                 success: args.success,
                 error: args.error,
                 dataType: 'json',

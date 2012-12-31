@@ -11,6 +11,7 @@ Pagination with data buffering and optional slider style
               query: 'type gte {a}, type lte {z}, time gt {0}',
               sort: 'type asc, time desc'
           },
+          method: 'GET',                                        // default: 'GET'
           onData: onDataCallback,                               // a callback returns dom element
           mode: 'slider',                                       // try 'slider' in narrow space and 'jumper' in waterfall page
           pageSize: 10,
