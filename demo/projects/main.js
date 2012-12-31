@@ -3,7 +3,7 @@ require.config({
         jquery: 'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min',
         underscore: 'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min',
         'jquery-mousewheel': 'http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.0.6/jquery.mousewheel.min',
-        libs: '../../js',
+        plugins: '../../js',
         utils: '../utils'
     },
     shim: {
@@ -16,7 +16,7 @@ require.config({
     }
 });
 
-require( [ 'jquery', 'underscore', 'utils/mocker', 'libs/pagination' ], function( $, _, Mocker ) {
+require( [ 'jquery', 'underscore', 'utils/mocker', 'plugins/pagination' ], function( $, _, Mocker ) {
     _.templateSettings = {
         interpolate : /\{\{=(.+?)\}\}/g
     };
