@@ -19,11 +19,11 @@
         '<span class="tip text">',
             '共<span class="count">0</span>条, <span class="pageCount">0</span>页',
         '</span>',
-        '<button class="next text">下一页</button>',
+        '<button class="prev text">上一页</button>',
         '<span class="current text">',
-            '第<input class="write text"><span class="read">0</span>页',
+            '第<span class="read">0</span><input class="write text">页',
         '</span>',
-        '<button class="prev text">上一页</button>'
+        '<button class="next text">下一页</button>'
     ].join( '' );
 
     var methods = {
