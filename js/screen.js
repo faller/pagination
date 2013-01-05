@@ -186,7 +186,9 @@
         $data.count = null;
         $data.buffer = {};
         var $page = _createPage.call( that, 0 );
-        pageMapping.currentPage = $page.removeClass( 'hidden' );;
+        pageMapping.currentPage = $page.removeClass( 'hidden' );
+        _setOverlay.call( that, 'empty', 'remove' );
+        _setOverlay.call( that, 'error', 'remove' );
         _completePage.call( that, $page, function() {
             _locate.call( that, 0 );
         });
@@ -246,7 +248,7 @@
         return function( location ) {
             var context = _getContext.call( this, location );
             if ( !context ) return _reload.call( this );
-            if ( !_.isFinite(context.targetPageNumber) || location < 0 || location > context.count ) return;
+            if ( !_.isFinite( context.targetPageNumber ) || location < 0 || location > context.count ) return;
             context.pageMapping.currentPage.find( '.pointed' ).removeClass( 'pointed' );
             context.targetPageNumber === context.currentPageNumber ? _pointItem( context ) : _findPage( context );
         };
@@ -265,20 +267,18 @@
     var _completePage = function( $page, callback ) {
         var that = this,
             $data = that.data( NAME_SPACE ),
-            pageSize = $data.pageSize;
+            pageSize = $data.pageSize,
+            inited = ( $data.count != null );
 
         var params = _.extend({
             skip: _pageNumber( $page ) * $data.pageSize,
-            limit: $data.initPageAmount ? ( $data.pageSize * $data.initPageAmount ) : $data.pageSize,
-            count: ( $data.count == null )
+            limit: inited ? $data.pageSize : ( $data.pageSize * $data.initPageAmount ),
+            count: !inited
         }, $data.params );
 
         var success = function( data ) {
-            if ( _.isEmpty( data.list ) ) {
-                _setOverlay.call( that, 'empty' );
-            } else {
-                $data.initPageAmount = null;
-                _setOverlay.call( that, 'empty', 'remove' );
+            if ( _.isEmpty( data.list ) && !inited ) {
+                return empty();
             }
             var $currentPage = $page,
                 currentSize  = 0;
@@ -310,8 +310,13 @@
             });
         };
 
+        var empty = function() {
+            _setOverlay.call( that, 'loading', 'remove' );
+            _setOverlay.call( that, 'empty' );
+        };
+
         var error = function() {
-            that.find( '.page' ).remove();
+            _setOverlay.call( that, 'loading', 'remove' );
             _setOverlay.call( that, 'error' );
         };
 
@@ -383,7 +388,7 @@
                     }, error );
                 }
             } else {
-                _doFetch( $data.dataSource, params, success, error );
+                _doFetch( $data.dataSource, params, $data.method, success, error );
             }
         };
     })();
