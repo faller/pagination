@@ -37,6 +37,7 @@
                     params: options.params,
                     method: options.method,
                     onData: options.onData,
+                    onError: options.onError,
                     pageSize: options.pageSize,
                     initPageAmount: options.initPageAmount,
                     buffered: options.buffered,
@@ -185,6 +186,7 @@
         that.find( '.page' ).remove();
         $data.count = null;
         $data.buffer = {};
+        if ( !$data.dataSource ) return;
         var $page = _createPage.call( that, 0 );
         pageMapping.currentPage = $page.removeClass( 'hidden' );
         _setOverlay.call( that, 'empty', 'remove' );
@@ -318,6 +320,7 @@
         var error = function() {
             _setOverlay.call( that, 'loading', 'remove' );
             _setOverlay.call( that, 'error' );
+            _.isFunction( $data.onError ) && $data.onError();
         };
 
         _setOverlay.call( that, 'loading' );
