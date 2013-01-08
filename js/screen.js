@@ -397,7 +397,7 @@
     })();
 
     var _dataSourceTransformer = function( dataSource ) {
-        return dataSource && _.isFunction( dataSource ) ? dataSource : function( args ) {
+        return !dataSource || _.isFunction( dataSource ) ? dataSource : function( args ) {
             $.ajax({
                 url: dataSource,
                 data: _.extend( {}, args.params ),
