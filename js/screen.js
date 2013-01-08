@@ -37,6 +37,7 @@
                     params: options.params,
                     method: options.method,
                     onData: options.onData,
+                    onSuccess: options.onSuccess,
                     onError: options.onError,
                     pageSize: options.pageSize,
                     initPageAmount: options.initPageAmount,
@@ -309,6 +310,7 @@
                     });
                 }
                 _.isFunction( callback ) && callback( $page );
+                _.isFunction( $data.onSuccess ) && $data.onSuccess();
             });
         };
 
