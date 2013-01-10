@@ -37,8 +37,8 @@
                     params: options.params,
                     method: options.method,
                     onData: options.onData,
-                    onSuccess: options.onSuccess,
-                    onError: options.onError,
+                    success: options.success,
+                    error: options.error,
                     pageSize: options.pageSize,
                     initPageAmount: options.initPageAmount,
                     buffered: options.buffered,
@@ -280,7 +280,7 @@
         }, $data.params );
 
         var success = function( data ) {
-            _.isFunction( $data.onSuccess ) && $data.onSuccess( data );
+            _.isFunction( $data.success ) && $data.success( data );
             if ( _.isEmpty( data.list ) && !inited ) {
                 return empty();
             }
@@ -322,7 +322,7 @@
         var error = function() {
             _setOverlay.call( that, 'loading', 'remove' );
             _setOverlay.call( that, 'error' );
-            _.isFunction( $data.onError ) && $data.onError();
+            _.isFunction( $data.error ) && $data.error();
         };
 
         _setOverlay.call( that, 'loading' );

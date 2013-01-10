@@ -13,8 +13,8 @@ Pagination with data buffering and optional slider style
           },
           method: 'GET',                                        // default: 'GET'
           onData: onDataCallback,                               // a callback returns dom element
-          onSuccess: null,                                      // success callback, default: do nothing
-          onError: null,                                        // error callback, default: do nothing
+          success: null,                                        // success callback, default: do nothing
+          error: null,                                          // error callback, default: do nothing
           mode: 'slider',                                       // try 'slider' in narrow space and 'jumper' in waterfall page
           pageSize: 10,
           initPageAmount: 1                                     // default: 1
