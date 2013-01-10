@@ -30,9 +30,9 @@
                 interpolate : /\{\{(.+?)\}\}/g
             };
 
-            var onDataCallback = function( data ) {
-                var template = _.template( $( '#fruitTemplate' ).html(), data );
-                return $(template);
+            var renderCallback = function( item ) {
+                var template = _.template( $( '#fruitTemplate' ).html(), item );
+                return $( template );
             };
 
             var dataSource = Mocker.mock({
@@ -46,8 +46,8 @@
 
             $( document ).ready( function() {
                 $( '#fruits' ).pagination({
-                    dataSource: dataSource,            // can be a function or url
-                    onData: onDataCallback,            // a callback return dom element
+                    dataSource: dataSource,            // can be a url or a function of 'Mocker'
+                    render: renderCallback,            // renderCallback( item, pageNumber, index ) which returns a dom element
                     params: {
                         query: 'type gte {a}, type lte {z}, id gt {0}',
                         sort: 'type desc, id asc'

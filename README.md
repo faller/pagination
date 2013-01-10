@@ -12,9 +12,9 @@ Pagination with data buffering and optional slider style
               sort: 'type asc, time desc'
           },
           method: 'GET',                                        // default: 'GET'
-          onData: onDataCallback,                               // a callback returns dom element
-          success: null,                                        // success callback, default: do nothing
-          error: null,                                          // error callback, default: do nothing
+          success: null,                                        // successCallback( data ), default: do nothing
+          error: null,                                          // errorCallback(), default: do nothing
+          render: renderCallback,                               // renderCallback( item, pageNumber, index ) which returns a dom element
           mode: 'slider',                                       // try 'slider' in narrow space and 'jumper' in waterfall page
           pageSize: 10,
           initPageAmount: 1                                     // default: 1

@@ -36,9 +36,9 @@
                     dataSource: _dataSourceTransformer( options.dataSource ),
                     params: options.params,
                     method: options.method,
-                    onData: options.onData,
                     success: options.success,
                     error: options.error,
+                    render: options.render,
                     pageSize: options.pageSize,
                     initPageAmount: options.initPageAmount,
                     buffered: options.buffered,
@@ -60,13 +60,13 @@
             });
         },
 
-        onData: function( callback ) {
+        render: function( callback ) {
             if ( callback ) {
                 return this.each( function() {
-                    $( this ).data( NAME_SPACE ).onData = callback;
+                    $( this ).data( NAME_SPACE ).render = callback;
                 });
             } else {
-                return this.data( NAME_SPACE ).onData;
+                return this.data( NAME_SPACE ).render;
             }
         },
 
@@ -271,10 +271,11 @@
         var that = this,
             $data = that.data( NAME_SPACE ),
             pageSize = $data.pageSize,
+            pageNumber = _pageNumber( $page ),
             inited = ( $data.count != null );
 
         var params = _.extend({
-            skip: _pageNumber( $page ) * $data.pageSize,
+            skip: pageNumber * $data.pageSize,
             limit: inited ? $data.pageSize : ( $data.pageSize * $data.initPageAmount ),
             count: !inited
         }, $data.params );
@@ -284,22 +285,17 @@
             if ( _.isEmpty( data.list ) && !inited ) {
                 return empty();
             }
-            var $currentPage = $page,
-                currentSize  = 0;
+            var size = 0;
             _processLargeArray( data.list, function( item ) {
-                var $dom = $( $data.onData( item ) ).addClass( 'item' );
-                if ( currentSize < pageSize ) {
-                    $currentPage.append( $dom );
-                    currentSize++;
+                if ( size < pageSize ) {
+                    var $dom = $( $data.render( item, pageNumber, size++ ) ).addClass( 'item' );
+                    $page.append( $dom );
+                } else if ( !$data.pageMapping[ ++pageNumber ] ) {
+                    $page = _createPage.call( that, pageNumber );
+                    size = 0;
+                    return arguments.callee( item );
                 } else {
-                    var nextPageNumber = _pageNumber( $currentPage ) + 1;
-                    if ( !$data.pageMapping[ nextPageNumber ] ) {
-                        $currentPage = _createPage.call( that, nextPageNumber );
-                        $currentPage.append( $dom );
-                        currentSize = 1;
-                    } else {
-                        return false;
-                    }
+                    return false;  // break processLargeArray
                 }
             }, function() {
                 _setOverlay.call( that, 'loading', 'remove' );

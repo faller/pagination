@@ -18,11 +18,11 @@ require.config({
 
 require( [ 'jquery', 'underscore', 'utils/mocker', 'plugins/pagination' ], function( $, _, Mocker ) {
     _.templateSettings = {
-        interpolate : /\{\{=(.+?)\}\}/g
+        interpolate : /\{\{(.+?)\}\}/g
     };
 
-    var onDataCallback = function( data ) {
-        var template = _.template( $( '#projectTemplate' ).html(), data );
+    var renderCallback = function( item ) {
+        var template = _.template( $( '#projectTemplate' ).html(), item );
         return $( template );
     };
 
@@ -58,8 +58,8 @@ require( [ 'jquery', 'underscore', 'utils/mocker', 'plugins/pagination' ], funct
 
     $( document ).ready( function() {
         $( '#projects' ).pagination({
-            dataSource: dataSource,            // can be a function or url
-            onData: onDataCallback,            // a callback return dom element
+            dataSource: dataSource,            // can be a url or a function of 'Mocker'
+            render: renderCallback,            // renderCallback( item, pageNumber, index ) which returns a dom element
             params: {
                 sort: 'type asc, money desc'
             },
