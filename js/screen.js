@@ -310,7 +310,7 @@
                     });
                 }
                 _.isFunction( callback ) && callback( $page );
-                _.isFunction( $data.onSuccess ) && $data.onSuccess();
+                _.isFunction( $data.onSuccess ) && $data.onSuccess( data );
             });
         };
 
