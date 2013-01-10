@@ -402,7 +402,7 @@
         return !dataSource || _.isFunction( dataSource ) ? dataSource : function( args ) {
             $.ajax({
                 url: dataSource,
-                data: _.extend( {}, args.params ),
+                data: args.params,
                 type: args.method ? args.method.toUpperCase() : 'GET',
                 success: args.success,
                 error: args.error,
