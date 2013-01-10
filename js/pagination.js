@@ -133,6 +133,12 @@
         select: function( selections ) {
             var $screen = $( this ).find( '.screen' );
             return $screen.pScreen( 'select', selections );
+        },
+
+        // reload pagination with the same dataSource and params
+        reload: function() {
+            var $screen = $( this ).find( '.screen' );
+            return $screen.pScreen( 'reload' );
         }
 
     };

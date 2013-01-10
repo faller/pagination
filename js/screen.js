@@ -158,6 +158,12 @@
                     _locate.call( $this, location );
                 }
             });
+        },
+
+        reload: function() {
+            return this.each( function() {
+                _reload.call( $( this ) );
+            });
         }
     };
 
