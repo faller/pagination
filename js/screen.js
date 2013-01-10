@@ -280,6 +280,7 @@
         }, $data.params );
 
         var success = function( data ) {
+            _.isFunction( $data.onSuccess ) && $data.onSuccess( data );
             if ( _.isEmpty( data.list ) && !inited ) {
                 return empty();
             }
@@ -310,7 +311,6 @@
                     });
                 }
                 _.isFunction( callback ) && callback( $page );
-                _.isFunction( $data.onSuccess ) && $data.onSuccess( data );
             });
         };
 
