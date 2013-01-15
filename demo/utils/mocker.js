@@ -245,10 +245,10 @@
             return function dataSource( args ) {
                 setTimeout( function() {
                     var result;
-                    if ( args.params.save ) {
+                    if ( args.params && args.params.save ) {
                         var item = _.isObject( args.params.save ) ? args.params.save : eval( '(' + args.params.save + ')' );
                         result = saveItem( items, item, configs );
-                    } else if ( args.params.remove ) {
+                    } else if ( args.params && args.params.remove ) {
                         var query = _.isArray( args.params.remove ) ? args.params.remove : parseQuery( args.params.remove );
                         result = removeItems( items, query );
                     } else {
