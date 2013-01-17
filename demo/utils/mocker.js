@@ -84,9 +84,10 @@
         var items = _.isArray( configs.template ) ? configs.template : _.times( configs.amount, function() {
             return deepClone( configs.template );
         });
-        _.each( items, function( item ) {
+        _.each( items, function( item, index ) {
             if ( configs.idAttribute ) {
-                item[ configs.idAttribute.key || configs.idAttribute ] = _.uniqueId( configs.idAttribute.prefix );
+                var id = index + 1;
+                item[ configs.idAttribute.key || configs.idAttribute ] = configs.idAttribute.prefix ? configs.idAttribute.prefix + id : id;
             }
             _.each( configs.randomAttributes, function( randomAttribute ) {
                 if ( _.isArray( randomAttribute.values ) ) {
