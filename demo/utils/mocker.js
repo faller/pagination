@@ -1,12 +1,12 @@
-//    dataSource mocker v0.4
+//    dataSource mocker v0.4.1
 //    (c) 2012-2013 caicanliang, faller@faller.cn
 //    freely distributed under the MIT license.
 //    Mocking dataSource by javascript, providing save, remove, query and sort
 
 //    create eg.
 //    var fruitsDataSource = Mocker.mock({
-//        template: { say: 'hello' },
-//        amount: 100,
+//        template: { say: 'hello' },                             // or an array: [ {..}, {..} ]
+//        amount: 100,                                            // it's necessary if template isn't an array
 //        idAttribute: 'id',                                      // or json full format: { key: 'id', prefix: 'fruit_' }
 //        randomAttributes: [{
 //            key: 'type',
@@ -81,16 +81,13 @@
 })( this, function( _ ) {
 
     var generateItems = function( configs ) {
-        var items = [];
-        var timeSeed = new Date().getTime();
-        var i = configs.amount;
-        while ( i-- ) {
-            var item = deepClone( configs.template );
+        var items = _.isArray( configs.template ) ? configs.template : _.times( configs.amount, function() {
+            return deepClone( configs.template );
+        });
+        _.each( items, function( item ) {
             if ( configs.idAttribute ) {
-                _.isString( configs.idAttribute ) && ( configs.idAttribute = { key: configs.idAttribute } );
-                item[ configs.idAttribute.key ] = _.uniqueId( configs.idAttribute.prefix );
+                item[ configs.idAttribute.key || configs.idAttribute ] = _.uniqueId( configs.idAttribute.prefix );
             }
-            configs.timeAttribute && ( item[ configs.timeAttribute ] = timeSeed - 1000 * i );
             _.each( configs.randomAttributes, function( randomAttribute ) {
                 if ( _.isArray( randomAttribute.values ) ) {
                     item[ randomAttribute.key ] = randomAttribute.values[ random( 0, randomAttribute.values.length - 1 ) ];
@@ -99,10 +96,9 @@
                 }
             });
             _.isFunction( configs.onCreate ) && configs.onCreate( item );
-            items.unshift( item );
-        }
+        });
         // to shuffle items order
-        return _.shuffle( items );
+        return _.isArray( configs.template ) ? items : _.shuffle( items );
     };
 
     var saveItem = function( items, item, configs ) {
