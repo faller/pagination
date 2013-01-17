@@ -21,6 +21,10 @@
 //        onCreate: function( item ) {                            // item on create callback
 //            item.say = 'hi';
 //        },
+//        onComplete: function( items ) {                         // items on complete callback
+//            // you can add some statistics
+//        },
+//        shuffle: true,                                          // to shuffle items order
 //        delay: 1000                                             // simulate request & response delay
 //    });
 
@@ -98,8 +102,9 @@
             });
             _.isFunction( configs.onCreate ) && configs.onCreate( item );
         });
-        // to shuffle items order
-        return _.isArray( configs.template ) ? items : _.shuffle( items );
+        configs.shuffle && ( items = _.shuffle( items ) );
+        _.isFunction( configs.onComplete ) && configs.onComplete( items );
+        return items;
     };
 
     var saveItem = function( items, item, configs ) {
