@@ -104,7 +104,7 @@
         sort: function( sort ) {
             var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
-            if ( sort ) {
+            if ( sort != null ) {
                 params.orderBy = _.isString( sort ) ? sort : _sortTransformer( sort );
                 $screen.pScreen( 'params', params );
             } else {
@@ -119,7 +119,7 @@
         query: function( query ) {
             var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
-            if ( query ) {
+            if ( query != null ) {
                 params.query = _.isString( query ) ? query : _queryTransformer( query );
                 $screen.pScreen( 'params', params );
             } else {
