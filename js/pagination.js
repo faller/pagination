@@ -120,7 +120,7 @@
             var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
             if ( query ) {
-                params.orderBy = _.isString( query ) ? query : _queryTransformer( query );
+                params.query = _.isString( query ) ? query : _queryTransformer( query );
                 $screen.pScreen( 'params', params );
             } else {
                 return _queryTransformer( params.query );
