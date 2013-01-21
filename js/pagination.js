@@ -525,7 +525,7 @@
                     }
                 }, function() {
                     _setOverlay.call( that, 'loading', 'remove' );
-                    if ( data.count != null ) {
+                    if ( !$data.count && data.count != null ) {
                         $data.count = data.count;
                         that.trigger( 'reload', {
                             pageSize: $data.pageSize,
