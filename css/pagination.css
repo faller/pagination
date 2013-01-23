@@ -33,7 +33,7 @@
 
 .pagination .jumper                 { position: absolute; left: 0px; width: 100%; bottom: -60px; height: 60px; line-height: 60px; text-align: right; display: none; }
 .pagination .jumper .text           { color: #555; font-family: Arial, sans-serif; font-size: 16px; text-align: center; vertical-align: middle; }
-.pagination .jumper button          { padding: 6px 16px; cursor: pointer; background: #E6E6E6; border: 1px solid lightGrey; -webkit-border-radius: 4px 4px 4px 4px; border-radius: 4px 4px 4px 4px; }
+.pagination .jumper button          { line-height: 20px; padding: 6px 16px; cursor: pointer; background: #E6E6E6; border: 1px solid lightGrey; -webkit-border-radius: 4px 4px 4px 4px; border-radius: 4px 4px 4px 4px; }
 .pagination .jumper button:hover    { background: #f9f9f9; }
 .pagination .jumper .tip            { float: left; }
 .pagination .jumper .current        { margin: 0px 16px; }
@@ -49,8 +49,9 @@
 .pagination .slider               { *height: expression( this.parentNode.offsetHeight ); }
 .pagination .slider .range        { *height: expression( this.parentNode.offsetHeight - 46 ); }
 .pagination .slider .current .tip { _padding: 0px 10px; }
+.pagination .jumper               { _bottom: -75px; }
 .pagination .jumper .tip          { _margin-top: -10px; }
-.pagination .jumper               { _bottom: -70px; }
+.pagination .jumper button        { *padding: 3px 6px; }
 
 .pagination.ie6-hover .slider .current .head,
 .pagination.ie6-hover .slider .current .tail,
