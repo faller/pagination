@@ -127,6 +127,13 @@
             }
         },
 
+        // set or get the dataSource params
+        // screen will reload after changing params
+        params: function( params ) {
+            var $screen = $( this ).find( '.screen' );
+            return $screen.pScreen( 'params', params );
+        },
+
         // set or get the selections
         // $doms will join selections after 'click' or 'touch' events
         // params eg. [ 0, 1 ] for selecting the first and second
