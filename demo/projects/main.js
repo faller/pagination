@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        jquery: 'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min',
+        jquery: 'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min',
         underscore: 'http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min',
         'jquery-mousewheel': 'http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.0.6/jquery.mousewheel.min',
         plugins: '../../js',
@@ -22,7 +22,7 @@ require( [ 'jquery', 'underscore', 'utils/mocker', 'plugins/pagination' ], funct
     };
 
     var renderCallback = function( item ) {
-        var template = _.template( $( '#projectTemplate' ).html(), item );
+        var template = _.template( $( '#projectTemplate' )[ 0 ].innerHTML, item );
         return $( template );
     };
 

@@ -12,7 +12,7 @@
             .fruit.pointed  { border-left-color: #CCC; }
             .fruit.selected { background: #F5F5F5; }
         </style>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.0.6/jquery.mousewheel.min.js"></script>
         <script src="../../js/pagination.js"></script>
@@ -28,7 +28,7 @@
             };
 
             var renderCallback = function( item ) {
-                var template = _.template( $( '#fruitTemplate' ).html(), item );
+                var template = _.template( $( '#fruitTemplate' )[ 0 ].innerHTML, item );
                 return $( template );
             };
 

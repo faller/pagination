@@ -1010,13 +1010,10 @@
                 } else {
                     _debounceAttr.call( that, 'current', ( inputVal - 1 ) * $data.pageSize );
                 }
-            });
-            if ( $.browser.msie && ( parseInt( $.browser.version, 10 ) === 8 ) ) {
+            }).on( 'keypress', function( event ) {
                 // ie8 hacks. preventing $next button trigger in ie8
-                $currentWrite.on( 'keypress', function( event ) {
-                    if ( event.keyCode === 13 ) return false;
-                });
-            }
+                if ( event.keyCode === 13 ) return false;
+            });
         };
 
         var _attr = function( key, value ) {
