@@ -267,6 +267,7 @@
                         };
                     }
                     _.isFunction( args.success ) && args.success( result );
+                    _.isFunction( args.complete ) && args.complete();
                 }, configs.delay );
             };
         }
