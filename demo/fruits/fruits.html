@@ -28,7 +28,7 @@
             };
 
             var renderCallback = function( item ) {
-                var template = _.template( $.trim( $( '#fruitTemplate' ).html() ), item );
+                var template = _.template( $( '#fruitTemplate' ).html().trim(), item );
                 return $( template );
             };
 
