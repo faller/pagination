@@ -22,7 +22,7 @@ require( [ 'jquery', 'underscore', 'utils/mocker', 'plugins/pagination' ], funct
     };
 
     var renderCallback = function( item ) {
-        var template = _.template( $( '#projectTemplate' ).html().trim(), item );
+        var template = _.template( $.trim( $( '#projectTemplate' ).html() ), item );
         return $( template );
     };
 
