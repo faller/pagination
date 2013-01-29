@@ -756,8 +756,8 @@
             $range.on( 'click', function( event ) {
                 _move.call( that, ( ( event.pageY > $current.offset().top ) ? 1 : -1 ) * $data.limit );
             }).on( 'click', '.current', function( event ) {
-                    event.stopPropagation();    // excluding the click within current
-                });
+                event.stopPropagation();    // excluding the click within current
+            });
 
             // this plugin was defined below
             $current.pDrags({
@@ -784,12 +784,13 @@
 
             // jquery mousewheel plugin was needed
             $parent.on( 'mousewheel', function( event, delta ) {
+                var goal = $data.start - delta;
+                ( goal < 0 || goal > $data.total - 1 ) || event.preventDefault();
                 if ( delta > 0 ) {
                     _move.call( that, -1 );
                 } else if ( delta < 0 ) {
                     _move.call( that, 1 );
                 }
-                event.preventDefault();
             });
 
             // simulate ':hover' for ie6
