@@ -785,11 +785,9 @@
             // jquery mousewheel plugin was needed
             $parent.on( 'mousewheel', function( event, delta ) {
                 var goal = $data.start - delta;
-                goal < 0 || goal > $data.total - 1 || event.preventDefault();
-                if ( delta > 0 ) {
-                    _move.call( that, -1 );
-                } else if ( delta < 0 ) {
-                    _move.call( that, 1 );
+                if ( goal >= 0 && goal <= $data.total - 1 ) {
+                    _move.call( that, -delta );
+                    event.preventDefault();
                 }
             });
 
