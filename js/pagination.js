@@ -105,7 +105,7 @@
             var $screen = $( this ).find( '.screen' ),
                 params = $screen.pScreen( 'params' ) || {};
             if ( sort != null ) {
-                params.orderBy = _.isString( sort ) ? sort : _sortTransformer( sort );
+                params.sort = _.isString( sort ) ? sort : _sortTransformer( sort );
                 $screen.pScreen( 'params', params );
             } else {
                 return _sortTransformer( params.sort );
