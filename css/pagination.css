@@ -4,6 +4,7 @@
 .pagination .screen .page .item         { }   /* on your own */
 .pagination .screen .page .item.seleted { }   /* on your own */
 .pagination .screen .page .item.pointed { }   /* on your own */
+.pagination.min-height                  { min-height: 300px; _height: auto !important; _height: 300px; }   /* on your own */
 
 .pagination .overlay         { display: none; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; }
 .pagination .overlay.loading { display: block; background: transparent url('img/loading.gif') no-repeat center center; }
@@ -44,7 +45,7 @@
 /* ie sucks begin */
 .pagination                       { *zoom: 1; }
 .pagination .screen               { *width: 100%; }
-.pagination .overlay              { _width:  expression( this.parentNode.offsetWidth ); }
+.pagination .overlay              { _width:  expression( this.parentNode.offsetWidth ); _height: expression( this.parentNode.offsetHeight ); }
 .pagination .jumper               { _width:  expression( this.parentNode.offsetWidth ); }
 .pagination .slider               { *height: expression( this.parentNode.offsetHeight ); }
 .pagination .slider .range        { *height: expression( this.parentNode.offsetHeight - 46 ); }

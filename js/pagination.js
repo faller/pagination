@@ -564,8 +564,6 @@
                 $overlay.removeClass( className );
             } else {
                 $overlay.addClass( className );
-                var parentHeight = this.parent().outerHeight();
-                $overlay.css( 'height', parentHeight ? parentHeight + 'px' : '300px' );
             }
         };
 
