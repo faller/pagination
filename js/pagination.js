@@ -559,10 +559,12 @@
         };
 
         var _setOverlay = function( className, operation ) {
-            var $overlay = this.parent().find( '.overlay' );
+            var $parent = this.parent(), $overlay = $parent.find( '.overlay' );
             if ( operation === 'remove' ) {
+                $parent.removeClass( 'when-overlay' );
                 $overlay.removeClass( className );
             } else {
+                $parent.addClass( 'when-overlay' );
                 $overlay.addClass( className );
             }
         };
