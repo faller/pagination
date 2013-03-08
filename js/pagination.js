@@ -544,11 +544,17 @@
             };
 
             var empty = function() {
+                that.trigger( 'reload', {
+                    count: 0
+                });
                 _setOverlay.call( that, 'loading', 'remove' );
                 _setOverlay.call( that, 'empty' );
             };
 
             var error = function() {
+                that.trigger( 'reload', {
+                    count: 0
+                });
                 _setOverlay.call( that, 'loading', 'remove' );
                 _setOverlay.call( that, 'error' );
                 _.isFunction( $data.error ) && $data.error();
