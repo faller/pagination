@@ -162,7 +162,7 @@
 
     var _bindEvents = function() {
         var that = this,
-            $screen = that.find( '.screen'),
+            $screen = that.find( '.screen' ),
             $slider = that.find( '.slider' ),
             $jumper = that.find( '.jumper' );
         $screen.on( 'reload', function( event, args ) {
@@ -225,7 +225,7 @@
         if ( _.isString( query ) ) {
             return ( query = query.replace( /^\s+|\s+$/g, '' ), query === '' ) ? [] :
                 _.map( query.replace( /\s*\}$/g, '' ).split( /\s*\}\s*\,\s*/ ), function( current ) {
-                    var divide = current.lastIndexOf('{');
+                    var divide = current.lastIndexOf( '{' );
                     var front = current.substring( 0, divide ).replace( /\s+$/, '' ).split( /\s+/ );
                     var behind = current.substring( divide + 1 ).replace( /^\s+/, '' );
                     return {
@@ -533,6 +533,10 @@
                 }, function() {
                     _setOverlay.call( that, 'loading', 'remove' );
                     if ( !$data.count && data.count != null ) {
+                        if ( data.list.length > data.count ) {
+                            console && console.error && console.error( 'Shit happens, list.length %s greater than total count %s', data.list.length, data.count );
+                            data.count = data.list.length;
+                        }
                         $data.count = data.count;
                         that.trigger( 'reload', {
                             pageSize: $data.pageSize,
@@ -755,7 +759,7 @@
         var _bindEvents = function() {
             var that = this,
                 $range = that.find( '.range' ),
-                $current = that.find( '.current'),
+                $current = that.find( '.current' ),
                 $data = that.data( NAME_SPACE ),
                 $parent = that.parent();
 
@@ -991,7 +995,7 @@
                 $prev = that.find( '.prev' ),
                 $next = that.find( '.next' ),
                 $current = that.find( '.current' ),
-                $currentRead = $current.find( '.read'),
+                $currentRead = $current.find( '.read' ),
                 $currentWrite = $current.find( '.write' );
             $prev.on( 'click', function( event ) {
                 _attr.call( that, 'current', $data.current - $data.pageSize );
@@ -1001,7 +1005,7 @@
             });
             $currentRead.on( 'click', function( event ) {
                 $currentRead.css( 'display', 'none' );
-                $currentWrite.css( 'display', 'inline').focus();
+                $currentWrite.css( 'display', 'inline' ).focus();
             });
             var _debounceAttr = _.debounce( _attr, DEBOUNCE_RATE );
             $currentWrite.on( 'blur', function( event ) {
