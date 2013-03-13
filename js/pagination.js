@@ -534,7 +534,7 @@
                     _setOverlay.call( that, 'loading', 'remove' );
                     if ( !$data.count && data.count != null ) {
                         if ( data.list.length > data.count ) {
-                            console && console.error && console.error( 'Shit happens, list.length %s greater than total count %s', data.list.length, data.count );
+                            window.console && window.console.error && window.console.error( 'Shit happens, list.length %s greater than total count %s', data.list.length, data.count );
                             data.count = data.list.length;
                         }
                         $data.count = data.count;
