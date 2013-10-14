@@ -27,7 +27,7 @@
 .pagination .slider .dragging .bg      { background-color: #EEE; }
 
 .pagination .slider .current .tip           { display: none; position: absolute; right: 15px; height: 20px; min-width: 30px; -webkit-border-radius: 8px 8px 8px 8px; border-radius: 8px 8px 8px 8px; }
-.pagination .slider .current .tip           { color: #808080; background-color: #EEE; font-size: 12px; font-family: arial, sans-serif; text-shadow: 1px 1px 1px white; text-align: center; vertical-align: middle; }
+.pagination .slider .current .tip           { color: #808080; background-color: #EEE; font-size: 12px; line-height: 20px; font-family: arial, sans-serif; text-shadow: 1px 1px 1px white; text-align: center; vertical-align: middle; }
 .pagination .slider .current .head .tip     { top: -10px; }
 .pagination .slider .current .tail .tip     { top: 11px; }
 .pagination .slider .dragging .current .tip { display: block; }
