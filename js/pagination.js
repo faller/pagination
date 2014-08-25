@@ -17,7 +17,7 @@
 //          pageSize: 10,
 //          initPageAmount: 1                                     // default: 1
 //          buffered: true,                                       // smart enough to pre-read and cache data
-//          bufferPageAmount: 2,                                  // default: 2
+//          bufferPageAmount: 2                                   // default: 2
 //    }
 
 (function ( factory ) {
