@@ -54,7 +54,7 @@
 
         destroy: function() {
             return this.each( function() {
-                var $this = $( this),
+                var $this = $( this ),
                     $screen = $this.find( '.screen' ),
                     $slider = $this.find( '.slider' ),
                     $jumper = $this.find( '.jumper' );
